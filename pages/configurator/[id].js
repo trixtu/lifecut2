@@ -16,6 +16,14 @@ import useSWR from 'swr'
 import styles from '@/styles/ConfiguratorStage.module.css'
 import { useParams } from 'next/navigation'
 
+const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
+const stepOne =
+  'Planen Sie Ihren Zaunverlauf, indem Sie die Zaunelemente aus der Übersicht mit der Maus auf die Rasenfläche ziehen. Länge und Preis werden immer angezeigt.'
+const stepTwo =
+  'Wählen Sie die gewünschten Pfosten, die bevorzugte Befestigungsart und ggf. extra Zubehör aus.'
+const stepThree =
+  'Mit dem Klick auf den "weiter"-Button landet Ihre komplette Zaunanlage im Warenkorb. Falls Sie Ihren Wunschzaun später noch einmal aufrufen möchten, einfach auf "speichern" klicken.'
+
 // setup inventory fetcher
 const fetchCollections = (url) => axios.get(url).then((res) => res.data)
 
@@ -80,7 +88,12 @@ const Configurator = () => {
         </div>
       ) : (
         <>
-          <InstructionSteps />
+          <InstructionSteps
+            title={title}
+            stepOne={stepOne}
+            stepTwo={stepTwo}
+            stepThree={stepThree}
+          />
           <h2 className="HeaderNav">Zaunserie wählen</h2>
           <ElementLibrary
             filteredCollection={filteredCollection}

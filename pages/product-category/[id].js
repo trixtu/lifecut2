@@ -10,6 +10,14 @@ import { useParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 
+const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
+const stepOne =
+  'Wählen Sie im unteren Bereich das gewünschte Material und die Zaunserie aus, die Ihnen gefällt.'
+const stepTwo =
+  'Planen Sie Ihren Zaunverlauf, indem Sie die Zaunelemente aus der Übersicht auf die Rasenfläche ziehen. Länge und Preis werden immer angezeigt.'
+const stepThree =
+  'Wählen Sie abschießend die gewünschten Pfosten, die bevorzugte Befestigungsart und ggf. extra Zubehör aus. Mit nur einem Klick legen Sie den gesamten Zaun samt Zubehör in den Warenkorb.'
+
 export default function productsCategory({ subCategory }) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const route = useRouter()
@@ -33,7 +41,12 @@ export default function productsCategory({ subCategory }) {
   if (categories.length > 0) {
     return (
       <div className="container">
-        <InstructionSteps />
+        <InstructionSteps
+          title={title}
+          stepOne={stepOne}
+          stepTwo={stepTwo}
+          stepThree={stepThree}
+        />
         <NextBreadcrumb
           homeElement={'Home'}
           separator={

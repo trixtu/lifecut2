@@ -6,10 +6,16 @@ import ProductCategoryList from '@/components/ProductCategoryList'
 import ChevronRight from '@/components/ui/ChevronRight'
 import { getAllSubcategory } from '@/lib/shopify'
 import { generateRandomId } from '@/utils/randomId'
-import Link from 'next/link'
-import { useParams } from 'next/navigation'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React from 'react'
+
+const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
+const stepOne =
+  'Wählen Sie im unteren Bereich das gewünschte Material und die Zaunserie aus, die Ihnen gefällt.'
+const stepTwo =
+  'Planen Sie Ihren Zaunverlauf, indem Sie die Zaunelemente aus der Übersicht auf die Rasenfläche ziehen. Länge und Preis werden immer angezeigt.'
+const stepThree =
+  'Wählen Sie abschießend die gewünschten Pfosten, die bevorzugte Befestigungsart und ggf. extra Zubehör aus. Mit nur einem Klick legen Sie den gesamten Zaun samt Zubehör in den Warenkorb.'
 
 export default function Zaunseries({ categories }) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -36,7 +42,12 @@ export default function Zaunseries({ categories }) {
   if (categories) {
     return (
       <div className="container">
-        <InstructionSteps />
+        <InstructionSteps
+          title={title}
+          stepOne={stepOne}
+          stepTwo={stepTwo}
+          stepThree={stepThree}
+        />
         <NextBreadcrumb
           homeElement={'Home'}
           separator={

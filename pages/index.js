@@ -28,6 +28,14 @@ const categories = [
   },
 ]
 
+const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
+const stepOne =
+  'Wählen Sie im unteren Bereich eine Zaunvariante, je nachdem ob Sie einen Sichtschutz, einen Garten- oder Doppelstabzaun benötigen.'
+const stepTwo =
+  'Bestimmen Sie nun das gewünschte Material und wählen die Zaunserie aus, deren Design Ihnen gefällt.'
+const stepThree =
+  'Planen Sie Ihren Zaunverlauf, indem Sie die Zaunelemente aus der Übersicht auf die Rasenfläche ziehen. Länge und Preis werden immer angezeigt und mit nur einem Klick legen Sie den gesamten Zaun samt Zubehör in den Warenkorb.'
+
 export default function Home() {
   return (
     <>
@@ -39,7 +47,12 @@ export default function Home() {
       </Head>
       <main>
         <div className="container">
-          <InstructionSteps />
+          <InstructionSteps
+            title={title}
+            stepOne={stepOne}
+            stepTwo={stepTwo}
+            stepThree={stepThree}
+          />
           <h2 className="HeaderNav">Zaunvariante wählen</h2>
           <ul className="ProductCategoryList w-auto p-0 mt-0 mb-4 box-border">
             {categories.map((category, index) => (
