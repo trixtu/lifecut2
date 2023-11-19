@@ -60,11 +60,11 @@ function GlobalState({ children }) {
 
   // Extrage toate referințele poste_2 într-un array separat
   const referintePoste2 = configuratorItems
-    .map((item) => item.node.pfosten_2?.references.edges)
+    .map((item) => item?.node?.pfosten_2?.references?.edges)
     .flat()
   // Utilizează un set pentru a elimina duplicatatele
   const referinteUnice = Array.from(
-    new Set(referintePoste2.map((referinta) => referinta?.node.id))
+    new Set(referintePoste2.map((referinta) => referinta?.node?.id))
   )
   // Utilizează referinteUnice în loc de referintePoste2 direct
 
@@ -74,7 +74,7 @@ function GlobalState({ children }) {
 
   // Filtrarea produselor care au tag-ul "defaultPfoste"
   const defaultPfoste = produseFiltrate.filter((produs) =>
-    produs.node.tags.includes('defaultPfoste')
+    produs?.node?.tags.includes('defaultPfoste')
   )
 
   useEffect(() => {

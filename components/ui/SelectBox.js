@@ -43,7 +43,7 @@ function SelectBox({ selected, setSelected, data }) {
                         selected ? 'font-medium' : 'font-normal'
                       }`}
                     >
-                      {poste.node.title}
+                      {poste?.node?.title}
                     </span>
                     {selected ? (
                       <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-red-500">

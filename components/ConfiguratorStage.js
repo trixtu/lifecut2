@@ -302,7 +302,8 @@ export default function ConfiguratorStage() {
                             >
                               <Image
                                 src={
-                                  selectedPfosten.node.images.edges[1].node.src
+                                  selectedPfosten?.node?.images?.edges[1]?.node
+                                    ?.src
                                 }
                                 width={(breitePfosten(item) + 1) * zoomLevel}
                                 height={heightPfosten(item)}
@@ -460,7 +461,9 @@ export default function ConfiguratorStage() {
                         >
                           {/* Afisează imaginea pentru pfosten */}
                           <Image
-                            src={selectedPfosten.node.images.edges[1].node.src}
+                            src={
+                              selectedPfosten?.node?.images?.edges[1]?.node?.src
+                            }
                             width={
                               parseFloat(
                                 configuratorItems.length > 0
