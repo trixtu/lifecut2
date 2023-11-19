@@ -1,0 +1,22 @@
+.ZoomControl {
+  color: var(--zoom, #ccc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+}
+.ZoomControl > * {
+  margin: 0 5px;
+}
+.Button {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  color: #fff;
+  background-color: #dad9d3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

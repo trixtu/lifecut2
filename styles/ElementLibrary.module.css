@@ -1,0 +1,107 @@
+.ElementLibrary {
+  border: 1px solid var(--element-library-border-color, #ccc);
+  background-color: var(--element-library-bg-color, #fff);
+  position: relative;
+  padding: 10px 0;
+  margin-top: 20px;
+  margin-bottom: var(--element-library-arrow-height, 25px);
+}
+.ElementLibrary::before {
+  border-top-color: var(--element-library-border-color, #ccc) !important ;
+}
+.ElementLibrary::before {
+  content: '';
+  position: absolute;
+  bottom: calc(-2 * var(--element-library-arrow-height, 25px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-top: var(--element-library-arrow-height, 25px) solid transparent;
+  border-right: var(--element-library-arrow-width, 50px) solid transparent !important;
+  border-left: var(--element-library-arrow-width, 50px) solid transparent;
+  border-bottom: var(--element-library-arrow-height, 25px) solid transparent;
+}
+
+.ScrollableAreaControlBoard {
+  justify-content: flex-start;
+  overflow: auto;
+  display: flex;
+}
+.ElementTrack {
+  padding-bottom: 1em;
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+.ElementTrack ul {
+  width: auto;
+  padding: 0;
+}
+.ElementTrack_Item {
+  display: flex;
+  align-items: flex-end;
+  flex: none;
+  position: relative;
+}
+.ElementLibrary_Item {
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  color: var(--element-track-color, #a7a7a0);
+  cursor: pointer;
+}
+
+.height {
+  transform: translate(50%, 50%) rotateZ(-90deg);
+  right: 0.5em;
+}
+.width {
+  position: absolute !important;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 100%);
+}
+.ElementLibrary_Item_Dimension {
+  position: relative;
+  height: 1em;
+  width: 1em;
+  display: flex;
+  justify-content: center;
+  line-height: 1em;
+}
+.ElementLibrary_Item {
+  position: relative;
+  text-align: center;
+}
+.ElementLibrary_Item:hover img {
+  opacity: 80%;
+}
+.ElementLibrary_Item:hover .AddIcon {
+  display: inline;
+  color: #fff;
+  background-color: #e31913;
+  border-color: #e31913;
+  border-radius: 50%;
+}
+.ProductItem {
+  display: flex;
+  position: relative;
+  z-index: 20;
+}
+.AddIcon {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 999;
+  transform: translate(-50%, -10px);
+  display: none;
+}
+.AddIcon:hover {
+  opacity: 90%;
+}
+
+.hidden {
+  display: none;
+}
