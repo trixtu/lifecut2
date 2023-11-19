@@ -2,10 +2,10 @@ import React from 'react'
 
 const InstructionSteps = () => {
   return (
-    <div classNameName="InstructionSteps bg-gray-200 p-4">
+    <div className="InstructionSteps bg-gray-200 p-4">
       <section className="InstructionSteps-Content">
-        <div classNameName="InstructionSteps-Header">
-          <h1 classNameName="InstructionSteps-Title">
+        <div className="InstructionSteps-Header">
+          <h1 className="InstructionSteps-Title">
             Willkommen beim Zaunplaner von www.hoerner-gmbh.com
           </h1>
 

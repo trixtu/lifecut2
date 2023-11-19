@@ -49,10 +49,14 @@ export default async function send(req, res) {
                     tags
                     
                     pfosten: metafield(namespace: "custom", key: "pfoste") {
+                      key
+                      id
                       reference {
                         ... on Product {
                           id
-                          handle 
+                          handle
+                          title
+                          tags
                           images(first: 10) {
                             nodes {
                               src
@@ -73,6 +77,28 @@ export default async function send(req, res) {
                                 compareAtPriceV2 {
                                   amount
                                   currencyCode
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                    pfosten_2: metafield(namespace: "custom", key: "poste_2") {
+                      key
+                      id
+                      references(first: 10) {
+                        edges {
+                          node {
+                            ... on Product {
+                              id
+                              title
+                              tags
+                              images(first: 10) {
+                                edges {
+                                  node {
+                                    src
+                                  }
                                 }
                               }
                             }

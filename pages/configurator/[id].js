@@ -11,12 +11,10 @@ import {
 } from '@heroicons/react/20/solid'
 
 import axios from 'axios'
-import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import styles from '@/styles/ConfiguratorStage.module.css'
 import { useParams } from 'next/navigation'
-import { data } from 'autoprefixer'
 
 // setup inventory fetcher
 const fetchCollections = (url) => axios.get(url).then((res) => res.data)
@@ -33,14 +31,14 @@ const Configurator = () => {
     (url) => fetchCollections(url),
     { errorRetryCount: 3 }
   )
-  console.log(allCollections)
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getCollection = () => {
     const meta = allCollections?.collections.edges
     const filterMeta = meta.filter(
       (f) => f?.node?.handleCollection?.value === params.id
     )
-    console.log(filterMeta)
+
     return (filteredCollection = filterMeta[0]?.node?.products)
   }
 
@@ -89,6 +87,7 @@ const Configurator = () => {
             handleAddToConfigurator={handleAddToConfigurator}
           />
           <ConfiguratorStage />
+
           <ConfiguratorOptions />
           <InfoBox title={'Zubehör'} content={products} />
           <InfoBox title={'Technische Infos'} content={products} />

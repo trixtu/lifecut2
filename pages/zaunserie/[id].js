@@ -25,7 +25,6 @@ export default function Zaunseries({ categories }) {
       product.node.tags.some((tag) => tag === 'defaultProduct')
     )
 
-    console.log(products)
     const newItemWithIds = defaultProducts.map((item) => ({
       ...item,
       id: generateRandomId(),
@@ -33,8 +32,6 @@ export default function Zaunseries({ categories }) {
 
     localStorage.setItem('configuratorItems', JSON.stringify(newItemWithIds))
   }
-
-  console.log(categories)
 
   if (categories) {
     return (

@@ -21,9 +21,11 @@ export default function ConfiguratorStage() {
     dragOverItem,
     configuratorItems,
     removeFromConfigurator,
+    selectedPfosten,
   } = useContext(Context)
 
-  console.log(configuratorItems)
+  console.log(selectedPfosten)
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleScroll = () => {
     const container = scrollContainerRef.current
@@ -300,8 +302,7 @@ export default function ConfiguratorStage() {
                             >
                               <Image
                                 src={
-                                  item?.node?.pfosten?.reference?.images
-                                    ?.nodes[1].src
+                                  selectedPfosten.node.images.edges[1].node.src
                                 }
                                 width={(breitePfosten(item) + 1) * zoomLevel}
                                 height={heightPfosten(item)}
@@ -459,13 +460,7 @@ export default function ConfiguratorStage() {
                         >
                           {/* Afisează imaginea pentru pfosten */}
                           <Image
-                            src={
-                              configuratorItems.length > 0
-                                ? configuratorItems[
-                                    configuratorItems.length - 1
-                                  ].node.pfosten.reference?.images?.nodes[1].src
-                                : ''
-                            }
+                            src={selectedPfosten.node.images.edges[1].node.src}
                             width={
                               parseFloat(
                                 configuratorItems.length > 0

@@ -5,6 +5,7 @@ export const Context = createContext(null)
 
 function GlobalState({ children }) {
   const [configuratorItems, setConfiguratorItems] = useState([])
+  const [selectedPfosten, setSelectedPfosten] = useState(null)
 
   const dragItem = useRef(null)
   const dragOverItem = useRef(null)
@@ -57,15 +58,43 @@ function GlobalState({ children }) {
     )
   }, [])
 
+  // Extrage toate referințele poste_2 într-un array separat
+  const referintePoste2 = configuratorItems
+    .map((item) => item.node.pfosten_2?.references.edges)
+    .flat()
+  // Utilizează un set pentru a elimina duplicatatele
+  const referinteUnice = Array.from(
+    new Set(referintePoste2.map((referinta) => referinta?.node.id))
+  )
+  // Utilizează referinteUnice în loc de referintePoste2 direct
+
+  const produseFiltrate = referinteUnice.map((id) =>
+    referintePoste2.find((referinta) => referinta?.node?.id === id)
+  )
+
+  // Filtrarea produselor care au tag-ul "defaultPfoste"
+  const defaultPfoste = produseFiltrate.filter((produs) =>
+    produs.node.tags.includes('defaultPfoste')
+  )
+
+  useEffect(() => {
+    if (!selectedPfosten) {
+      setSelectedPfosten(defaultPfoste[0])
+    }
+  }, [defaultPfoste, selectedPfosten])
+
   return (
     <Context.Provider
       value={{
         dragItem,
-        dragOverItem,
         handleSort,
+        dragOverItem,
+        produseFiltrate,
+        selectedPfosten,
         configuratorItems,
-        handleAddToConfigurator,
+        setSelectedPfosten,
         removeFromConfigurator,
+        handleAddToConfigurator,
       }}
     >
       {children}
