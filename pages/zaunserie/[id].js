@@ -1,13 +1,11 @@
-'use client'
-
+import React, { useContext } from 'react'
+import { getAllZaunserie } from '@/lib/shopify'
+import { generateRandomId } from '@/utils/randomId'
 import NextBreadcrumb from '@/components/Breadcrumb'
+import ChevronRight from '@/components/ui/ChevronRight'
 import InstructionSteps from '@/components/InstructionSteps'
 import ProductCategoryList from '@/components/ProductCategoryList'
-import ChevronRight from '@/components/ui/ChevronRight'
-import { getAllSubcategory } from '@/lib/shopify'
-import { generateRandomId } from '@/utils/randomId'
-import { useRouter } from 'next/router'
-import React from 'react'
+import { Context } from '@/context/configuratorContext'
 
 const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
 const stepOne =
@@ -18,13 +16,7 @@ const stepThree =
   'Wählen Sie abschießend die gewünschten Pfosten, die bevorzugte Befestigungsart und ggf. extra Zubehör aus. Mit nur einem Klick legen Sie den gesamten Zaun samt Zubehör in den Warenkorb.'
 
 export default function Zaunseries({ categories }) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const route = useRouter()
-  const id = route.query.id
-
-  // const meta = subCategory?.metaobjects?.edges.map((m) =>
-  //   m.node.fields.find((field) => field?.reference?.handle === id)
-  // )
+  const { selectedPfosten } = useContext(Context)
 
   function defaultProduct(products) {
     const defaultProducts = products.filter((product) =>
@@ -34,6 +26,7 @@ export default function Zaunseries({ categories }) {
     const newItemWithIds = defaultProducts.map((item) => ({
       ...item,
       id: generateRandomId(),
+      pfosten: { node: item.node.pfosten.reference },
     }))
 
     localStorage.setItem('configuratorItems', JSON.stringify(newItemWithIds))
@@ -71,8 +64,8 @@ export default function Zaunseries({ categories }) {
               }
             >
               <ProductCategoryList
-                title={c.node.handle}
-                image={c.node.fields[2].reference.image?.url}
+                title={c?.node?.fields[3]?.value}
+                image={c.node.fields[5].reference?.image?.url}
                 handle={c.node.handle}
               />
             </a>
@@ -86,10 +79,10 @@ export default function Zaunseries({ categories }) {
 }
 
 export async function getStaticProps({ params }) {
-  const subCategory = await getAllSubcategory()
+  const subCategory = await getAllZaunserie()
   const meta = subCategory?.metaobjects?.edges
   const categories = meta.filter(
-    (m) => m.node.fields[1].reference.handle === params.id
+    (m) => m?.node?.fields[1]?.reference?.handle === params.id
   )
 
   return {

@@ -290,3 +290,21 @@
   margin-right: 0 !important;
   margin-top: 25px;
 }
+.CloneSpace {
+  flex: none;
+}
+
+.CloneButton {
+  position: absolute;
+
+  z-index: 30;
+}
+.LineIcon {
+  position: absolute;
+  right: 100%;
+  top: calc(16px - 1px);
+  transform: translateY(-50%);
+  stroke: #f8f9fa;
+  fill: #f8f9fa;
+  height: auto;
+}

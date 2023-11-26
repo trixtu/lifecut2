@@ -40,6 +40,11 @@ export default async function send(req, res) {
               handle
               handleCollection: metafield(namespace: "custom", key: "handle") {
                 value
+                key
+          namespace
+          type
+          id
+          description
               }
               products(first: 100) {
                 edges {

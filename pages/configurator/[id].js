@@ -1,20 +1,19 @@
-import ConfiguratorOptions from '@/components/ConfiguratorOptions'
-import ConfiguratorStage from '@/components/ConfiguratorStage'
-import ElementLibrary from '@/components/ElementLibrary'
+import useSWR from 'swr'
+import axios from 'axios'
 import InfoBox from '@/components/InfoBox'
-import InstructionSteps from '@/components/InstructionSteps'
+import { useParams } from 'next/navigation'
 import { Context } from '@/context/configuratorContext'
+import ElementLibrary from '@/components/ElementLibrary'
+import styles from '@/styles/ConfiguratorStage.module.css'
+import InstructionSteps from '@/components/InstructionSteps'
+import React, { useContext, useEffect, useState } from 'react'
+import ConfiguratorStage from '@/components/ConfiguratorStage'
+import ConfiguratorOptions from '@/components/ConfiguratorOptions'
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   CloudIcon,
 } from '@heroicons/react/20/solid'
-
-import axios from 'axios'
-import React, { useContext, useEffect, useState } from 'react'
-import useSWR from 'swr'
-import styles from '@/styles/ConfiguratorStage.module.css'
-import { useParams } from 'next/navigation'
 
 const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
 const stepOne =
@@ -27,18 +26,42 @@ const stepThree =
 // setup inventory fetcher
 const fetchCollections = (url) => axios.get(url).then((res) => res.data)
 
+let filteredZaunserie = null
 let filteredCollection = null
 
 const Configurator = () => {
-  const { handleAddToConfigurator } = useContext(Context)
-  const [loading, setLoading] = useState(true)
   const params = useParams()
+  const [loading, setLoading] = useState(true)
+  const {
+    selectedPfosten,
+    setSelectedPfosten,
+    handleSelect,
+    configuratorItems,
+    handleAddToConfigurator,
+  } = useContext(Context)
 
   const { data: allCollections } = useSWR(
     [`/api/collections`],
     (url) => fetchCollections(url),
     { errorRetryCount: 3 }
   )
+
+  const { data: allZaunserie } = useSWR(
+    ['/api/zaunserie'],
+    (url) => fetchCollections(url),
+    { errorRetryCount: 3 }
+  )
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getZaunserie = () => {
+    const meta = allZaunserie?.metaobjects?.edges
+    const filterMeta = meta?.filter((m) => m?.node?.handle === params.id)
+    if (filterMeta) {
+      const pfosten = filterMeta.map((m) => m.node.fields[2])
+      return (filteredZaunserie = pfosten)
+    }
+    return
+  }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getCollection = () => {
@@ -51,17 +74,42 @@ const Configurator = () => {
   }
 
   useEffect(() => {
-    if (allCollections !== undefined) {
+    if (allCollections !== undefined && allZaunserie !== undefined) {
       getCollection()
+      getZaunserie()
       setLoading(false)
     }
-  }, [allCollections, getCollection])
+  }, [allCollections, allZaunserie, getCollection, getZaunserie])
+
+  // useEffect(() => {
+  //   if (allZaunserie !== undefined) {
+  //     getZaunserie()
+  //   }
+  // }, [allZaunserie, getZaunserie])
+
+  const data =
+    filteredZaunserie?.length > 0
+      ? filteredZaunserie.map(
+          (z) => z?.reference?.fields[1]?.references.edges[0]
+        )
+      : null
+
+  const defaultPfoste = data
+    ? data?.filter((pfoste) =>
+        pfoste?.node?.tags.some((tag) => tag === 'defaultPfoste')
+      )
+    : null
+
+  useEffect(() => {
+    setSelectedPfosten(defaultPfoste ? defaultPfoste[0] : data)
+  }, [data, defaultPfoste, selectedPfosten, setSelectedPfosten])
 
   const products = () => {
     const products = [
       { title: 'eeer', desc: 'ddfdfdfdf' },
       { title: 'sdsdsdsdd', desc: 'effdfds' },
     ]
+
     return (
       <div>
         <ul>
@@ -101,7 +149,7 @@ const Configurator = () => {
           />
           <ConfiguratorStage />
 
-          <ConfiguratorOptions />
+          <ConfiguratorOptions filteredZaunserie={filteredZaunserie} />
           <InfoBox title={'Zubehör'} content={products} />
           <InfoBox title={'Technische Infos'} content={products} />
           <div className={styles.ConfiguratorFooter}>
