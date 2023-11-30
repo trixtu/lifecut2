@@ -160,6 +160,10 @@ export default async function send(req, res) {
                                       }
                                     }
                                   }
+                                  options(first: 10) {
+                                    name
+                                    values
+                                  }
                                 }
                               }
                             }

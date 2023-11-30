@@ -238,7 +238,7 @@ export default function ConfiguratorStage() {
   }
 
   function breitePfosten(pfoste) {
-    const options = pfoste?.node?.pfosten?.reference?.options || []
+    const options = pfoste?.pfosten?.node?.options || []
     const value = options.find((option) => option.name === 'Breite')
 
     return value ? parseFloat(value.values[0]) : 0
@@ -365,7 +365,7 @@ export default function ConfiguratorStage() {
           <strong className={`${styles.k5price} ${styles.k5WithoutDiscount}`}>
             {configuratorItems &&
               getSymbolFromCurrency(
-                configuratorItems[0]?.node.variants?.edges[0].node?.priceV2
+                configuratorItems[0]?.node?.variants?.edges[0].node?.priceV2
                   ?.currencyCode
               )}
             {totalElementPlusPfostenCompareAtPrice.toFixed(2)}
@@ -374,7 +374,7 @@ export default function ConfiguratorStage() {
           <strong className={styles.SpecialPrice}>
             {configuratorItems &&
               getSymbolFromCurrency(
-                configuratorItems[0]?.node.variants?.edges[0].node?.priceV2
+                configuratorItems[0]?.node?.variants?.edges[0].node?.priceV2
                   ?.currencyCode
               )}
             {totalElementPlusPfosten.toFixed(2)}

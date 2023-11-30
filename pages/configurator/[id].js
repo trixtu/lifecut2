@@ -32,13 +32,8 @@ let filteredCollection = null
 const Configurator = () => {
   const params = useParams()
   const [loading, setLoading] = useState(true)
-  const {
-    selectedPfosten,
-    setSelectedPfosten,
-    handleSelect,
-    configuratorItems,
-    handleAddToConfigurator,
-  } = useContext(Context)
+  const { selectedPfosten, setSelectedPfosten, handleAddToConfigurator } =
+    useContext(Context)
 
   const { data: allCollections } = useSWR(
     [`/api/collections`],

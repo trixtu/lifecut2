@@ -22,8 +22,8 @@ const NextBreadcrumb = ({
         <li className={listClasses}>
           <Link href={'/'}>{homeElement}</Link>
         </li>
-        {pathNames.length > 0 && separator}
-        {pathNames.map((link, index) => {
+        {pathNames?.length > 0 && separator}
+        {pathNames?.map((link, index) => {
           let href = `/${pathNames.slice(0, index + 1).join('/')}`
           let itemClasses =
             paths === href ? `${listClasses} ${activeClasses}` : listClasses

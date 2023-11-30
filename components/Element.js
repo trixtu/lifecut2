@@ -22,8 +22,6 @@ const Element = ({
     const heightOption = options.find((option) => option.name === 'Höhe')
     const height = heightOption ? parseFloat(heightOption.values[0]) : 0
 
-    console.log(pfoste)
-
     if (prevPfoste) {
       const prevHeightOptions =
         prevPfoste?.node?.options.find((option) => option.name === 'Höhe') || {}
@@ -43,51 +41,52 @@ const Element = ({
   const handleContent = (item) => {
     return (
       <div className="text-xs p-2 relative min-w-[160px] max-w-sm">
-        <p>Material:{item.node.title}</p>
+        <p>Material:{item.node?.title}</p>
         <div className="mt-2">
           <p>
             Breite unten:
             <span className="pl-2">
-              {item.node.options.find((o) => o.name === 'Breite').values[0]}
+              {item.node?.options.find((o) => o.name === 'Breite').values[0]}
             </span>
           </p>
           <p>
             Höhe links:
             <span className="pl-2">
-              {item.node.options.find((o) => o.name === 'Höhe').values[0]}
+              {item.node?.options.find((o) => o.name === 'Höhe').values[0]}
             </span>
           </p>
           <p>
             Höhe rechts:
             <span className="pl-2">
-              {item.node.options.find((o) => o.name === 'Auf')
+              {item.node?.options.find((o) => o.name === 'Auf')
                 ? item.node.options.find((o) => o.name === 'Auf').values[0]
-                : item.node.options.find((o) => o.name === 'Höhe').values[0]}
+                : item.node?.options.find((o) => o.name === 'Höhe').values[0]}
             </span>
           </p>
         </div>
         <div className="absolute bottom-0 right-0 font-bold text-sm flex flex-col">
-          {item.node.variants.edges[0].node.compareAtPriceV2 !== null ? (
+          {item.node?.variants?.edges[0].node.compareAtPriceV2 !== null ? (
             <span className="line-through">
-              {item.node.variants.edges[0].node.compareAtPriceV2 !== null &&
+              {item.node?.variants?.edges[0].node.compareAtPriceV2 !== null &&
                 getSymbolFromCurrency(
-                  item.node.variants.edges[0].node.compareAtPriceV2.currencyCode
+                  item.node?.variants?.edges[0].node.compareAtPriceV2
+                    .currencyCode
                 )}
-              {item.node.variants.edges[0].node.compareAtPriceV2.amount}
+              {item.node?.variants?.edges[0].node.compareAtPriceV2.amount}
             </span>
           ) : null}
 
           <span
             className={
-              item.node.variants.edges[0].node.compareAtPriceV2 !== null
+              item.node?.variants?.edges[0].node.compareAtPriceV2 !== null
                 ? 'text-red-500'
                 : ''
             }
           >
             {getSymbolFromCurrency(
-              item.node.variants.edges[0].node.priceV2.currencyCode
+              item.node?.variants?.edges[0].node.priceV2.currencyCode
             )}
-            {item.node.variants.edges[0].node.priceV2.amount}
+            {item.node?.variants?.edges[0].node.priceV2.amount}
           </span>
         </div>
       </div>
@@ -214,7 +213,7 @@ const Element = ({
                       <div className={styles.Info}>
                         <Popover
                           content={handleContent(item)}
-                          title={item.node.title}
+                          title={item.node?.title}
                         >
                           <button
                             className={`${styles.InfoPopover} ${styles.info}`}

@@ -39,7 +39,7 @@ export default async function send(req, res) {
             node {
               handle
               handleCollection: metafield(namespace: "custom", key: "handle") {
-                value
+                value   
                 key
           namespace
           type
