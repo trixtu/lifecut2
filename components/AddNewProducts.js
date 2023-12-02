@@ -19,7 +19,9 @@ const AddNewProducts = ({
     <>
       {hoveredProduct ? (
         <>
-          <li className={`${styles.ElementTrack_Item} opacity-50`}>
+          <li
+            className={`${styles.ElementTrack_Item} opacity-50  transition ease-in-out`}
+          >
             <div className={styles.FenceConfigurator_StageItem}>
               <div className={styles.Inner}>
                 <div
@@ -36,7 +38,7 @@ const AddNewProducts = ({
                       width: (breite(ultimulProdus) + 20) * zoomLevel,
                       height: (heightElement(ultimulProdus) + 36) * zoomLevel,
                     }}
-                    alt=""
+                    alt={ultimulProdus?.node?.handle}
                   />
                 </div>
                 {/* button */}

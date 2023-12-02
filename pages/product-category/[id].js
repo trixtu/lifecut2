@@ -5,6 +5,7 @@ import InstructionSteps from '@/components/InstructionSteps'
 import ProductCategoryList from '@/components/ProductCategoryList'
 import ChevronRight from '@/components/ui/ChevronRight'
 import { getAllSubcategory } from '@/lib/shopify'
+import { Breadcrumb } from 'antd'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/router'
@@ -47,20 +48,37 @@ export default function productsCategory({ subCategory }) {
           stepTwo={stepTwo}
           stepThree={stepThree}
         />
-        <NextBreadcrumb
-          homeElement={'Home'}
+
+        <Breadcrumb
+          className="font-semibold"
           separator={
-            <span>
-              <ChevronRight className={'w-4 h-4'} />
-            </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-4 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
           }
-          activeClasses="text-amber-500"
-          containerClasses="flex items-center"
-          listClasses="hover:underline mx-2 font-bold"
-          capitalizeLinks
+          items={[
+            {
+              title: 'Material wählen',
+            },
+            {
+              title: 'Zurück',
+              href: '/',
+            },
+          ]}
         />
-        <h2 className="HeaderNav">Material wählen</h2>
-        <ul>
+
+        <ul className="mt-5">
           {categories.map((c) => (
             <Link key={c.node?.handle} href={`/zaunserie/${c.node?.handle}`}>
               <ProductCategoryList

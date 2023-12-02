@@ -10,8 +10,7 @@ import {
 import Link from 'next/link'
 import ProductCategoryList from '@/components/ProductCategoryList'
 import InstructionSteps from '@/components/InstructionSteps'
-
-const inter = Inter({ subsets: ['latin'] })
+import { Breadcrumb } from 'antd'
 
 const categories = [
   {
@@ -19,12 +18,6 @@ const categories = [
     url: '#',
     image: '/images/sichtschutzzaun.jpg',
     handle: 'sichtschutzzaune',
-  },
-  {
-    title: 'Gartenzäune',
-    url: '#',
-    image: '/images/gartenzaun.jpg ',
-    handle: 'gartenmobel',
   },
 ]
 
@@ -53,8 +46,17 @@ export default function Home() {
             stepTwo={stepTwo}
             stepThree={stepThree}
           />
-          <h2 className="HeaderNav">Zaunvariante wählen</h2>
-          <ul className="ProductCategoryList w-auto p-0 mt-0 mb-4 box-border">
+          <Breadcrumb
+            className="font-semibold"
+            separator="/"
+            items={[
+              {
+                title: 'Zaunvariante wählen',
+              },
+            ]}
+          />
+
+          <ul className="ProductCategoryList w-auto p-0 mt-5 mb-4 box-border">
             {categories.map((category, index) => (
               <Link href={`/product-category/${category.handle}`} key={index}>
                 <ProductCategoryList
@@ -67,22 +69,6 @@ export default function Home() {
           </ul>
         </div>
       </main>
-      {/* <div className="container w-full">
-        {products2.map((product) => (
-          <div key={product.node.id}>
-            <Link href={`products/${product.node.handle}`}>
-              <h1>{product.node.title}</h1>
-              <Image
-                src={product?.node?.images?.edges[0].node.url}
-                width={400}
-                height={300}
-                alt={product?.node?.title}
-                priority
-              />
-            </Link>
-          </div>
-        ))}
-      </div> */}
     </>
   )
 }

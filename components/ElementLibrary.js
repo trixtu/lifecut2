@@ -72,7 +72,7 @@ const ElementLibrary = ({ filteredCollection, handleAddToConfigurator }) => {
                         }}
                       >
                         <Image
-                          src={product.node.images.nodes[1].src}
+                          src={product?.node?.images?.nodes[1]?.src}
                           width={breiteElement(product)}
                           height={heightElement(product)}
                           alt={product.node.handle}

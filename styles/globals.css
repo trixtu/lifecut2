@@ -55,3 +55,6 @@ h2 {
   padding: 30px 40px;
   background-color: #dad9d3;
 }
+a.ant-breadcrumb-link {
+  font-weight: 700;
+}

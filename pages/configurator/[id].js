@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 import axios from 'axios'
 import InfoBox from '@/components/InfoBox'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { Context } from '@/context/configuratorContext'
 import ElementLibrary from '@/components/ElementLibrary'
 import styles from '@/styles/ConfiguratorStage.module.css'
@@ -14,6 +14,8 @@ import {
   ChevronRightIcon,
   CloudIcon,
 } from '@heroicons/react/20/solid'
+import NextBreadcrumb from '@/components/Breadcrumb'
+import { Breadcrumb } from 'antd'
 
 const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
 const stepOne =
@@ -28,6 +30,8 @@ const fetchCollections = (url) => axios.get(url).then((res) => res.data)
 
 const Configurator = () => {
   const params = useParams()
+  const router = useRouter()
+
   const [loading, setLoading] = useState(true)
   const { selectedPfosten, setSelectedPfosten, handleAddToConfigurator } =
     useContext(Context)
@@ -44,10 +48,10 @@ const Configurator = () => {
     { errorRetryCount: 3 }
   )
 
-  const getZaunserie = (allZaunserie) => {
+  const getZaunseriePfoste = (allZaunserie) => {
     if (allZaunserie) {
       const meta = allZaunserie?.metaobjects?.edges
-      const filterMeta = meta?.filter((m) => m?.node?.handle === params.id)
+      const filterMeta = meta?.filter((m) => m?.node?.handle === params?.id)
       const pfosten = filterMeta.map((m) => m.node.fields[2])
       return pfosten
     }
@@ -59,7 +63,7 @@ const Configurator = () => {
       const meta = allCollections?.collections.edges
 
       const filterMeta = meta?.filter(
-        (f) => f?.node?.handleCollection?.value === params.id
+        (f) => f?.node?.handleCollection?.value === params?.id
       )
       return filterMeta[0].node.products
     }
@@ -67,20 +71,28 @@ const Configurator = () => {
     return
   }
 
-  const filteredCollections = getCollection(allCollections)
-  const filteredZaunseries = getZaunserie(allZaunserie)
+  const getZaunserie = (allZaunserie) => {
+    if (allZaunserie) {
+      const meta = allZaunserie?.metaobjects?.edges
+      const filterMeta = meta.filter((m) => m.node.handle === params?.id)
+      return filterMeta
+    }
+    return
+  }
 
-  console.log(filteredZaunseries)
+  const filteredCollections = getCollection(allCollections)
+  const filteredZaunseriesPfoste = getZaunseriePfoste(allZaunserie)
+  const filteredZaunserie = getZaunserie(allZaunserie)
 
   useEffect(() => {
-    if (filteredCollections && filteredZaunseries) {
+    if (filteredCollections && filteredZaunseriesPfoste && filteredZaunserie) {
       setLoading(false)
     }
-  }, [filteredCollections, filteredZaunseries])
+  }, [filteredCollections, filteredZaunserie, filteredZaunseriesPfoste])
 
   const data =
-    filteredZaunseries?.length > 0
-      ? filteredZaunseries.map(
+    filteredZaunseriesPfoste?.length > 0
+      ? filteredZaunseriesPfoste.map(
           (z) => z?.reference?.fields[1]?.references.edges[0]
         )
       : null
@@ -133,7 +145,47 @@ const Configurator = () => {
             stepTwo={stepTwo}
             stepThree={stepThree}
           />
-          <h2 className="HeaderNav">Zaunserie wählen</h2>
+
+          <Breadcrumb
+            className="font-semibold"
+            separator={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-4 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 19.5L8.25 12l7.5-7.5"
+                />
+              </svg>
+            }
+            items={[
+              {
+                title: `${
+                  filteredZaunserie[0]?.node?.fields.find(
+                    (f) => f.key === 'collection'
+                  ).reference.title
+                }`,
+              },
+              {
+                title: 'Zurück',
+                href: '#',
+                onClick: () =>
+                  router.push(
+                    `/zaunserie/${
+                      filteredZaunserie[0]?.node?.fields.find(
+                        (f) => f.key === 'parent'
+                      ).reference.handle
+                    }`
+                  ),
+              },
+            ]}
+          />
 
           <ElementLibrary
             filteredCollection={filteredCollections}
@@ -141,7 +193,7 @@ const Configurator = () => {
           />
           <ConfiguratorStage />
 
-          <ConfiguratorOptions filteredZaunserie={filteredZaunseries} />
+          <ConfiguratorOptions filteredZaunserie={filteredZaunseriesPfoste} />
           <InfoBox title={'Zubehör'} content={products} />
           <InfoBox title={'Technische Infos'} content={products} />
           <div className={styles.ConfiguratorFooter}>

@@ -1,14 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { getAllZaunserie } from '@/lib/shopify'
+import React, { useEffect, useState } from 'react'
 import { generateRandomId } from '@/utils/randomId'
-import NextBreadcrumb from '@/components/Breadcrumb'
-import ChevronRight from '@/components/ui/ChevronRight'
 import InstructionSteps from '@/components/InstructionSteps'
 import ProductCategoryList from '@/components/ProductCategoryList'
-import { Context } from '@/context/configuratorContext'
 import useSWR from 'swr'
 import axios from 'axios'
 import { useParams } from 'next/navigation'
+import { Avatar, Breadcrumb, List, Skeleton, Space } from 'antd'
 
 const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
 const stepOne =
@@ -21,14 +18,9 @@ const stepThree =
 // setup inventory fetcher
 const fetchCollections = (url) => axios.get(url).then((res) => res.data)
 
-let filteredCollection = null
-
 export default function Zaunseries() {
-  const { selectedPfosten } = useContext(Context)
-  const [loading, setLoading] = useState(true)
-  const [collection, setCollection] = useState([])
-
   const params = useParams()
+  const [loading, setLoading] = useState(true)
 
   const { data: allCollections } = useSWR(
     [`/api/zaunserie`],
@@ -36,27 +28,25 @@ export default function Zaunseries() {
     { errorRetryCount: 3 }
   )
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getCollection = () => {
-    const meta = allCollections?.metaobjects?.edges
-    const filterMeta = meta.filter(
-      (m) => m?.node?.fields[1]?.reference?.handle === params.id
-    )
-    return
-  }
-
   const filteredCollection = (allCollections) => {
     if (allCollections) {
       const meta = allCollections?.metaobjects?.edges
       const filterMeta = meta?.filter(
         (m) => m?.node?.fields[1]?.reference?.handle === params?.id
       )
+
       return filterMeta
     }
     return
   }
 
   const filteredCollections = filteredCollection(allCollections)
+
+  useEffect(() => {
+    if (filteredCollections) {
+      setLoading(false)
+    }
+  }, [filteredCollections])
 
   function defaultProduct(fields) {
     //default products
@@ -81,33 +71,51 @@ export default function Zaunseries() {
     localStorage.setItem('configuratorItems', JSON.stringify(newItemWithIds))
   }
 
-  if (filteredCollections) {
-    return (
-      <div className="container">
-        <InstructionSteps
-          title={title}
-          stepOne={stepOne}
-          stepTwo={stepTwo}
-          stepThree={stepThree}
-        />
-        <NextBreadcrumb
-          homeElement={'Home'}
-          separator={
-            <span>
-              <ChevronRight className={'w-4 h-4'} />
-            </span>
-          }
-          activeClasses="text-amber-500"
-          containerClasses="flex items-center"
-          listClasses="hover:underline mx-2 font-bold"
-          capitalizeLinks
-        />
-        <h2 className="HeaderNav">Zaunserie wählen</h2>
-        <ul>
-          {filteredCollections &&
-            filteredCollections?.map((c) => (
+  const items = [
+    {
+      title: 'Zaunserie wählen',
+    },
+    {
+      title: 'Zurück',
+      href: '/',
+    },
+  ]
+
+  return (
+    <div className="container">
+      <InstructionSteps
+        title={title}
+        stepOne={stepOne}
+        stepTwo={stepTwo}
+        stepThree={stepThree}
+      />
+      <Breadcrumb
+        className="font-semibold"
+        separator={
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-4 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 19.5L8.25 12l7.5-7.5"
+            />
+          </svg>
+        }
+        items={items}
+      />
+
+      <ul className="mt-5">
+        {filteredCollections &&
+          filteredCollections?.map((c, index) =>
+            !loading ? (
               <a
-                key={c.node.handle}
+                key={index}
                 href={`/configurator/${c.node.handle}`}
                 onClick={() => defaultProduct(c.node)}
               >
@@ -117,30 +125,13 @@ export default function Zaunseries() {
                   handle={c.node.handle}
                 />
               </a>
-            ))}
-        </ul>
-      </div>
-    )
-  }
-
-  return <div>null</div>
+            ) : (
+              <Space key={index}>
+                <Skeleton.Button size="large" />
+              </Space>
+            )
+          )}
+      </ul>
+    </div>
+  )
 }
-
-// export async function getStaticProps({ params }) {
-//   const subCategory = await getAllZaunserie()
-//   const meta = subCategory?.metaobjects?.edges
-//   const categories = meta.filter(
-//     (m) => m?.node?.fields[1]?.reference?.handle === params.id
-//   )
-
-//   return {
-//     props: { categories }, // will be passed to the page component as props
-//   }
-// }
-
-// export async function getStaticPaths() {
-//   return {
-//     paths: [{ params: { id: 'sd' } }], // will be passed to the page component as props
-//     fallback: true,
-//   }
-// }

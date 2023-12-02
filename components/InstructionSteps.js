@@ -2,7 +2,7 @@ import React from 'react'
 
 const InstructionSteps = ({ title, stepOne, stepTwo, stepThree }) => {
   return (
-    <div className="InstructionSteps">
+    <div className="InstructionSteps mb-3">
       <section className="InstructionSteps-Content">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-semibold">{title}</h1>
