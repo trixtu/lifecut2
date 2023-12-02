@@ -1,18 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import styles from '@/styles/ConfiguratorOptios.module.css'
 import SelectBox from './ui/SelectBox'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { Context } from '@/context/configuratorContext'
 import { Popover } from 'antd'
 
-const befestigung = [
-  { name: 'Wade Cooper' },
-  { name: 'Arlene Mccoy' },
-  { name: 'Devon Webb' },
-  { name: 'Tom Cook' },
-  { name: 'Tanya Fox' },
-  { name: 'Hellen Schmidt' },
-]
 const ConfiguratorOptions = ({ filteredZaunserie }) => {
   const {
     selectedPfosten,
@@ -21,24 +13,23 @@ const ConfiguratorOptions = ({ filteredZaunserie }) => {
     configuratorItems,
   } = useContext(Context)
 
-  const [selectedBefestigung, setSelectedBefestigung] = useState(befestigung[0])
-
   const content = (
     <div className="max-w-[150px] text-xs">
-      {configuratorItems.length > 0 &&
-        configuratorItems.map((p) => (
+      {filteredZaunserie.length > 0 &&
+        filteredZaunserie.map((p) => (
           <p key={p.key}>
-            {p?.reference?.fields[0]?.value.replace('!\n', ' ')}
+            {p?.reference?.fields
+              .find((f) => f.key === 'hinweis')
+              .value.replace('!\n', ' ')}
           </p>
         ))}
     </div>
   )
-  const data =
-    filteredZaunserie?.length > 0
-      ? filteredZaunserie.map(
-          (z) => z?.reference?.fields[1]?.references.edges[0]
-        )
-      : null
+
+  const data = filteredZaunserie?.map(
+    (z) =>
+      z?.reference?.fields.find((f) => f.key === 'pfosten').references.edges[0]
+  )
 
   const defaultPfoste = data?.filter((pfoste) =>
     pfoste?.node?.tags.some((tag) => tag === 'defaultPfoste')
@@ -49,7 +40,7 @@ const ConfiguratorOptions = ({ filteredZaunserie }) => {
     if (!selectedPfosten) {
       setSelectedPfosten(defaultPfosteFinal)
     }
-  }, [defaultPfoste, defaultPfosteFinal, selectedPfosten, setSelectedPfosten])
+  }, [defaultPfosteFinal, selectedPfosten, setSelectedPfosten])
 
   return (
     <div className={styles.ConfiguratorOptions}>
@@ -73,7 +64,7 @@ const ConfiguratorOptions = ({ filteredZaunserie }) => {
           </div>
         )}
 
-        <div className="px-4 pt-0 pb-3 capitalize bg-neutral-200">
+        {/* <div className="px-4 pt-0 pb-3 capitalize bg-neutral-200">
           <h2 className="flex items-center">
             Befestigung <InformationCircleIcon className="w-6 h-6" />
           </h2>
@@ -83,7 +74,7 @@ const ConfiguratorOptions = ({ filteredZaunserie }) => {
             data={befestigung}
             //defaultValue={defaultPfoste}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   )

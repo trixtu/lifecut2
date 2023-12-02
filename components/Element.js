@@ -98,8 +98,6 @@ const Element = ({
       {configuratorItems && configuratorItems.length > 0
         ? configuratorItems.map((item, index) => (
             <div className={styles.ElementTrack_Item} key={index}>
-              {/* ... restul codului existent ... */}
-
               <li className={styles.ElementTrack_Item}>
                 <div className={styles.FenceConfigurator_StageItem}>
                   <div className={styles.Inner}>
@@ -151,7 +149,7 @@ const Element = ({
                           width: (breite(item) + 20) * zoomLevel,
                           height: (heightElement(item) + 36) * zoomLevel,
                         }}
-                        alt=""
+                        alt={item?.node?.handle}
                       />
                     </div>
                     {/* button */}
@@ -318,10 +316,8 @@ const Element = ({
                         zoomLevel,
                     }}
                     alt={
-                      configuratorItems.length > 0
-                        ? configuratorItems[configuratorItems.length - 1].node
-                            ?.pfosten?.reference?.handle
-                        : ''
+                      configuratorItems[configuratorItems.length - 1].node
+                        ?.pfosten?.reference?.handle
                     }
                   />
                 </div>

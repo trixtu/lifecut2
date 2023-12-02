@@ -15,7 +15,6 @@ export default function ConfiguratorStage() {
   const scrollContainerRef = useRef(null)
   const [zoomLevel, setZoomLevel] = useState(1)
   const [dragEnabled, setDragEnabled] = useState(true)
-  const [draggedItem, setDraggedItem] = useState(null)
   const [showScrollLeftButton, setShowScrollLeftButton] = useState(false)
   const [showScrollRightButton, setShowScrollRightButton] = useState(false)
 

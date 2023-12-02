@@ -49,7 +49,7 @@ export default function Zaunseries() {
     if (allCollections) {
       const meta = allCollections?.metaobjects?.edges
       const filterMeta = meta?.filter(
-        (m) => m?.node?.fields[1]?.reference?.handle === params.id
+        (m) => m?.node?.fields[1]?.reference?.handle === params?.id
       )
       return filterMeta
     }
@@ -58,37 +58,26 @@ export default function Zaunseries() {
 
   const filteredCollections = filteredCollection(allCollections)
 
-  console.log(filteredCollections)
-  function defaultPfosten(filteredCollections) {
-    // Verifică dacă filteredCollections conține elemente
-    if (filteredCollections && filteredCollections.length > 0) {
-      // Alege prima valoare a proprietății pfosten din prima colecție filtrată
-      const firstPfosten = filteredCollections[0]?.node
-
-      // Returnează valoarea pfosten sau o valoare implicită
-      return firstPfosten
-    }
-
-    // În cazul în care filteredCollections nu conține elemente
-    return 'Valoare implicită pentru pfosten'
-  }
-
-  function defaultProduct(products, fields) {
-    const defaultProducts = products.filter((product) =>
-      product.node.tags.some((tag) => tag === 'defaultProduct')
+  function defaultProduct(fields) {
+    //default products
+    const fieldCollection = fields.fields.find((f) => f.key === 'collection')
+    const defaultProducts = fieldCollection.reference.products.edges.filter(
+      (product) => product.node.tags.some((tag) => tag === 'defaultProduct')
     )
+
+    //default pfoste
     const fieldOne = fields.fields.find((f) => f.key === 'pfosten')
     const fieldTwo = fieldOne.reference.fields.find((f) => f.key === 'pfosten')
     const defaultPfoste = fieldTwo.references.edges.find((pfoste) =>
       pfoste.node.tags.some((tag) => tag === 'defaultPfoste')
     )
+
     const newItemWithIds = defaultProducts.map((item) => ({
       ...item,
       id: generateRandomId(),
       pfosten: defaultPfoste,
     }))
 
-    console.log(products)
     localStorage.setItem('configuratorItems', JSON.stringify(newItemWithIds))
   }
 
@@ -120,12 +109,7 @@ export default function Zaunseries() {
               <a
                 key={c.node.handle}
                 href={`/configurator/${c.node.handle}`}
-                onClick={() =>
-                  defaultProduct(
-                    c.node.fields[0].reference.products.edges,
-                    c.node
-                  )
-                }
+                onClick={() => defaultProduct(c.node)}
               >
                 <ProductCategoryList
                   title={c?.node?.fields[3]?.value}

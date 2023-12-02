@@ -24,15 +24,13 @@ const ElementLibrary = ({ filteredCollection, handleAddToConfigurator }) => {
           <ul className={styles.ElementTrack}>
             {filteredCollection &&
               filteredCollection.edges.map((product) => (
-                // product.node.tags.map(tag=>tag)
-
                 <li
+                  key={product.node.handle}
                   className={
                     product.node.tags.some((tag) => tag === 'pfosten')
                       ? styles.hidden
                       : styles.ElementTrack_Item
                   }
-                  key={product.node.handle}
                 >
                   <div className={styles.ElementLibrary_Item}>
                     {product.node.options &&

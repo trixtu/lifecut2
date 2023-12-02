@@ -26,9 +26,6 @@ const stepThree =
 // setup inventory fetcher
 const fetchCollections = (url) => axios.get(url).then((res) => res.data)
 
-let filteredZaunserie = null
-let filteredCollection = null
-
 const Configurator = () => {
   const params = useParams()
   const [loading, setLoading] = useState(true)
@@ -47,44 +44,43 @@ const Configurator = () => {
     { errorRetryCount: 3 }
   )
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getZaunserie = () => {
-    const meta = allZaunserie?.metaobjects?.edges
-    const filterMeta = meta?.filter((m) => m?.node?.handle === params.id)
-    if (filterMeta) {
+  const getZaunserie = (allZaunserie) => {
+    if (allZaunserie) {
+      const meta = allZaunserie?.metaobjects?.edges
+      const filterMeta = meta?.filter((m) => m?.node?.handle === params.id)
       const pfosten = filterMeta.map((m) => m.node.fields[2])
-      return (filteredZaunserie = pfosten)
+      return pfosten
     }
     return
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getCollection = () => {
-    const meta = allCollections?.collections.edges
-    const filterMeta = meta.filter(
-      (f) => f?.node?.handleCollection?.value === params.id
-    )
+  const getCollection = (allCollections) => {
+    if (allCollections) {
+      const meta = allCollections?.collections.edges
 
-    return (filteredCollection = filterMeta[0]?.node?.products)
+      const filterMeta = meta?.filter(
+        (f) => f?.node?.handleCollection?.value === params.id
+      )
+      return filterMeta[0].node.products
+    }
+
+    return
   }
 
+  const filteredCollections = getCollection(allCollections)
+  const filteredZaunseries = getZaunserie(allZaunserie)
+
+  console.log(filteredZaunseries)
+
   useEffect(() => {
-    if (allCollections !== undefined && allZaunserie !== undefined) {
-      getCollection()
-      getZaunserie()
+    if (filteredCollections && filteredZaunseries) {
       setLoading(false)
     }
-  }, [allCollections, allZaunserie, getCollection, getZaunserie])
-
-  // useEffect(() => {
-  //   if (allZaunserie !== undefined) {
-  //     getZaunserie()
-  //   }
-  // }, [allZaunserie, getZaunserie])
+  }, [filteredCollections, filteredZaunseries])
 
   const data =
-    filteredZaunserie?.length > 0
-      ? filteredZaunserie.map(
+    filteredZaunseries?.length > 0
+      ? filteredZaunseries.map(
           (z) => z?.reference?.fields[1]?.references.edges[0]
         )
       : null
@@ -138,13 +134,14 @@ const Configurator = () => {
             stepThree={stepThree}
           />
           <h2 className="HeaderNav">Zaunserie wählen</h2>
+
           <ElementLibrary
-            filteredCollection={filteredCollection}
+            filteredCollection={filteredCollections}
             handleAddToConfigurator={handleAddToConfigurator}
           />
           <ConfiguratorStage />
 
-          <ConfiguratorOptions filteredZaunserie={filteredZaunserie} />
+          <ConfiguratorOptions filteredZaunserie={filteredZaunseries} />
           <InfoBox title={'Zubehör'} content={products} />
           <InfoBox title={'Technische Infos'} content={products} />
           <div className={styles.ConfiguratorFooter}>
