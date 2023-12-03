@@ -116,6 +116,7 @@ const Configurator = () => {
     setSelectedPfosten(defaultPfoste ? defaultPfoste[0] : data)
   }, [data, defaultPfoste, selectedPfosten, setSelectedPfosten])
 
+  //elements
   const configuratorToAdeddItems = configuratorItems.map((item) => {
     const allOptions = {}
 
@@ -135,6 +136,28 @@ const Configurator = () => {
     }
   })
 
+  //pfosten
+  const configuratorPfosten = configuratorItems.map((pfoste) => {
+    const allOptions = {}
+
+    pfoste.pfosten.node.options.map((item) => {
+      allOptions[item.name] = item.values[0]
+    })
+
+    return {
+      id: pfoste.pfosten.node.variants.edges[0].node.id,
+      title: pfoste.pfosten.node.title,
+      handle: pfoste.node.handle,
+      image: pfoste.pfosten.node.images?.edges[0].node.src,
+      height: pfoste.node.options.find((f) => f.name === 'Höhe').values[0],
+      options: allOptions,
+      variantTitle: pfoste.pfosten.node.title,
+      variantPrice: pfoste.pfosten.node.variants.edges[0].node.priceV2.amount,
+      variantQuantity: 1,
+    }
+  })
+
+  //grouped elements
   function groupedProducts(configuratorToAdeddItems) {
     if (configuratorToAdeddItems.length > 0) {
       const groupedProductsObj = {}
@@ -161,6 +184,55 @@ const Configurator = () => {
   }
 
   const groupedProductsFinal = groupedProducts(configuratorToAdeddItems)
+
+  //grouped pfosten
+  function groupedPfosten(configuratorPfosten) {
+    if (configuratorPfosten.length > 0) {
+      const groupedProductsObj = {}
+
+      configuratorPfosten.forEach((product) => {
+        const productId = product.id
+        const height = product.height
+
+        // Creați o cheie unică pentru fiecare grup în funcție de productId și height
+        const groupKey = `${productId}_${height}`
+
+        // Dacă produsul există în obiectul grupat, mărește variantQuantity
+        if (groupedProductsObj[groupKey]) {
+          groupedProductsObj[groupKey].variantQuantity +=
+            product.variantQuantity
+        } else {
+          // Dacă produsul nu există, adaugă-l în obiectul grupat
+          groupedProductsObj[groupKey] = { ...product }
+        }
+      })
+
+      // Transformă obiectul grupat într-un array
+      let resultProducts = Object.values(groupedProductsObj)
+
+      // Adaugă 1 la variantQuantity pentru fiecare element din array
+
+      resultProducts = resultProducts.map((product, index) => {
+        if (index === 0) {
+          return {
+            ...product,
+            variantQuantity: product.variantQuantity + 1,
+          }
+        } else {
+          return {
+            ...product,
+          }
+        }
+      })
+
+      return resultProducts
+    }
+    return []
+  }
+
+  const groupedPfostenFinal = groupedPfosten(configuratorPfosten)
+
+  const items = [...groupedProductsFinal, ...groupedPfostenFinal]
 
   const products = () => {
     const products = [
@@ -266,7 +338,7 @@ const Configurator = () => {
               </a>
 
               <button
-                onClick={() => addMultipleToCart(groupedProductsFinal)}
+                onClick={() => addMultipleToCart(items)}
                 className="flex items-center m-0  min-w-[160px] justify-center bg-red-500 text-white px-4 py-2 gap-1 cursor-pointer"
               >
                 weiter

@@ -67,13 +67,15 @@ export default function ShopProvider({ children }) {
     }
   }
 
-  async function addMultipleToCart(addedItems) {
+  async function addMultipleToCart(addedItems, addedPfoste) {
     setCartOpen(true)
 
+    console.log('addedPfoste', addedPfoste)
     if (cart.length === 0) {
       const itemsWithQuantities = addedItems.map((item) => ({
         ...item,
       }))
+
       const id = itemsWithQuantities[0].id
       const checkout = await createCheckout(id, addedItems)
 

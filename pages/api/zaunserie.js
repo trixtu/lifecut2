@@ -118,6 +118,11 @@ export default async function send(req, res) {
                                   variants(first: 10) {
                                     edges {
                                       node {
+                                        title
+                                        id
+                                        image {
+                                          url
+                                        }
                                         priceV2 {
                                           amount
                                           currencyCode
