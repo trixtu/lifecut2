@@ -118,7 +118,7 @@ const Element = ({
                           width: (breitePfosten(item) + 1) * zoomLevel,
                           height: heightPfosten(item) * zoomLevel,
                         }}
-                        alt={item?.node?.handle}
+                        alt={item?.node?.handle + 'key'}
                       />
                     </div>
                   </div>
@@ -149,7 +149,7 @@ const Element = ({
                           width: (breite(item) + 20) * zoomLevel,
                           height: (heightElement(item) + 36) * zoomLevel,
                         }}
-                        alt={item?.node?.handle}
+                        alt={item?.node?.handle + 'img'}
                       />
                     </div>
                     {/* button */}
@@ -317,7 +317,7 @@ const Element = ({
                     }}
                     alt={
                       configuratorItems[configuratorItems.length - 1].node
-                        ?.pfosten?.reference?.handle
+                        ?.pfosten?.reference?.handle + 'img_1'
                     }
                   />
                 </div>

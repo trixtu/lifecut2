@@ -51,62 +51,8 @@ export default async function send(req, res) {
                           node {
                             handle
                             id
+                            title
                             tags
-                            pfosten: metafield(namespace: "custom", key: "pfoste") {
-                              reference {
-                                ... on Product {
-                                  id
-                                  handle 
-                                  images(first: 10) {
-                                    nodes {
-                                      src
-                                      url
-                                    }
-                                  }
-                                  options(first: 10) {
-                                    name
-                                    values
-                                  }
-                                  variants(first: 10) {
-                                    edges {
-                                      node {
-                                        priceV2 {
-                                          amount
-                                          currencyCode
-                                        }
-                                        compareAtPriceV2 {
-                                          amount
-                                          currencyCode
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                            pfosten_2: metafield(namespace: "custom", key: "poste_2") {
-                              key
-                              id
-                              references(first: 10) {
-                                edges {
-                                  node {
-                                    ... on Product {
-                                      id
-                                      title
-                                      tags
-                                      images(first: 10) {
-                                        edges {
-                                          node {
-                                            src
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                             
-                            }
                             images(first: 10) {
                               nodes {
                                 src
@@ -120,6 +66,11 @@ export default async function send(req, res) {
                             variants(first: 10) {
                               edges {
                                 node {
+                                  title
+                                  id
+                                  image {
+                                    url
+                                  }
                                   priceV2 {
                                     amount
                                     currencyCode
@@ -163,6 +114,21 @@ export default async function send(req, res) {
                                   options(first: 10) {
                                     name
                                     values
+                                  }
+                                  variants(first: 10) {
+                                    edges {
+                                      node {
+                                        priceV2 {
+                                          amount
+                                          currencyCode
+                                        }
+                                        compareAtPriceV2 {
+                                          amount
+                                          currencyCode
+                                        }
+
+                                      }
+                                    }
                                   }
                                 }
                               }

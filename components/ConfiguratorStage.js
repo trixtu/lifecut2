@@ -1,15 +1,13 @@
-import Image from 'next/image'
+import Element from './Element'
 import ZoomControl from './ZoomControl'
 import ChevronLeft from './ui/ChevronLeft'
 import ChevronRight from './ui/ChevronRight'
+import AddNewProducts from './AddNewProducts'
+import ModalAddMultiple from './ModalAddMultiple'
 import { Context } from '@/context/configuratorContext'
 import getSymbolFromCurrency from 'currency-symbol-map'
 import styles from '@/styles/ConfiguratorStage.module.css'
-import React, { Fragment, useContext, useEffect, useRef, useState } from 'react'
-import AddNewProducts from './AddNewProducts'
-
-import ModalAddMultiple from './ModalAddMultiple'
-import Element from './Element'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 
 export default function ConfiguratorStage() {
   const scrollContainerRef = useRef(null)
@@ -23,7 +21,6 @@ export default function ConfiguratorStage() {
     handleSort,
     dragOverItem,
     handleAddNew,
-    selectedPfosten,
     configuratorItems,
     addMultipleProducts,
     removeFromConfigurator,
@@ -103,13 +100,12 @@ export default function ConfiguratorStage() {
 
   function calculateTotalPricePfosten(configuratorItems) {
     const pfoste =
-      configuratorItems[0]?.node?.pfosten?.reference?.variants?.edges[0]?.node
-        ?.priceV2?.amount || 0
+      configuratorItems[0]?.pfosten?.node?.variants?.edges[0]?.node?.priceV2
+        ?.amount || 0
     const totalPrice = configuratorItems.reduce((accumulator, product) => {
       const variantPrice =
         parseFloat(
-          product?.node?.pfosten?.reference?.variants?.edges[0]?.node?.priceV2
-            ?.amount
+          product?.pfosten?.node?.variants?.edges[0]?.node?.priceV2?.amount
         ) || 0
 
       return accumulator + variantPrice
@@ -134,13 +130,13 @@ export default function ConfiguratorStage() {
 
   function calculateTotalComparePricePfosten(configuratorItems) {
     const pfoste =
-      configuratorItems[0]?.node?.pfosten?.reference?.variants?.edges[0]?.node
+      configuratorItems[0]?.pfosten?.node?.variants?.edges[0]?.node
         ?.compareAtPriceV2?.amount || 0
     const totalPrice = configuratorItems.reduce((accumulator, product) => {
       const variantPrice =
         parseFloat(
-          product?.node?.pfosten?.reference?.variants?.edges[0]?.node
-            ?.compareAtPriceV2?.amount
+          product?.pfosten?.node?.variants?.edges[0]?.node?.compareAtPriceV2
+            ?.amount
         ) || 0
 
       return accumulator + variantPrice
@@ -204,14 +200,14 @@ export default function ConfiguratorStage() {
     let totalForBreiteOption = 0
     const widthPfoste =
       parseFloat(
-        products[0]?.node?.pfosten?.reference?.options.find(
+        products[0]?.pfosten?.node?.options.find(
           (option) => option.name === 'Breite'
         ).values[0]
       ) || 0
 
     products.forEach((product) => {
       const totalForWidthOption = calculateTotalForOption(
-        product?.node?.pfosten?.reference?.options,
+        product?.pfosten?.node?.options,
         'Breite'
       )
 
@@ -318,7 +314,7 @@ export default function ConfiguratorStage() {
               <div
                 className={styles.myBackgroundGrass}
                 style={{
-                  height: 22 * zoomLevel,
+                  height: 20 * zoomLevel,
                   backgroundPositionY: '3px',
                   backgroundRepeat: 'repeat-x',
                 }}

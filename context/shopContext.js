@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react'
 import { createCheckout, updateCheckout } from '../lib/shopify'
+import { createCheckout2 } from '@/lib/checkout'
 
 const CartContext = createContext()
 
@@ -27,14 +28,12 @@ export default function ShopProvider({ children }) {
 
   async function addToCart(addedItem) {
     const newItem = { ...addedItem }
-    console.log(newItem)
-    // setCartOpen(true)
+    setCartOpen(true)
 
     if (cart.length === 0) {
       setCart([newItem])
 
       const checkout = await createCheckout(newItem.id, 1)
-
       setCheckoutId(checkout.id)
       setCheckoutUrl(checkout.webUrl)
 
@@ -62,6 +61,76 @@ export default function ShopProvider({ children }) {
         JSON.stringify([newCart, newCheckout])
       )
     }
+  }
+
+  async function addMultipleToCart(addedItems) {
+    setCartOpen(true)
+
+    if (cart.length === 0) {
+      const itemsWithQuantities = addedItems.map((item) => ({
+        ...item,
+      }))
+      const id = itemsWithQuantities[0].id
+      const checkout = await createCheckout(id, addedItems)
+
+      setCart(itemsWithQuantities)
+      setCheckoutId(checkout?.id)
+      setCheckoutUrl(checkout?.webUrl)
+
+      localStorage.setItem(
+        'checkout_id',
+        JSON.stringify([itemsWithQuantities, checkout])
+      )
+    } else {
+      let newCart = [...cart]
+
+      addedItems.forEach((addedItem) => {
+        const existingItem = newCart.find((item) => item.id === addedItem.id)
+
+        if (existingItem) {
+          existingItem.variantQuantity += 1
+        } else {
+          newCart.push({ ...addedItem, variantQuantity: 1 })
+        }
+      })
+
+      setCart(newCart)
+
+      const newCheckout = await updateCheckout(checkoutId, newCart)
+
+      localStorage.setItem(
+        'checkout_id',
+        JSON.stringify([newCart, newCheckout])
+      )
+    }
+  }
+
+  async function addItemsToCart(itemsToAdd) {
+    const newItem = [...itemsToAdd]
+
+    console.log('item', newItem[0].id)
+
+    if (cart.length === 0) {
+      setCart(newItem)
+      const checkout = await createCheckout(newItem[0].id, 1)
+      //const newCheckout = await updateCheckout(checkoutId, newItem)
+      setCheckoutId(checkout.id)
+      setCheckoutUrl(checkout.webUrl)
+
+      localStorage.setItem('checkout_id', JSON.stringify([newItem, checkout]))
+    }
+
+    // // Exemplu:
+    // const updatedCart = [...cart, ...itemsToAdd]
+
+    // setCart(updatedCart)
+
+    // const newCheckout = await updateCheckout(checkoutId, updatedCart)
+
+    // localStorage.setItem(
+    //   'checkout_id',
+    //   JSON.stringify([updatedCart, newCheckout])
+    // )
   }
 
   async function removeCartItem(itemToRemove) {
@@ -152,6 +221,8 @@ export default function ShopProvider({ children }) {
         cartLoading,
         incrementCartItem,
         decrementCartItem,
+        addMultipleToCart,
+        addItemsToCart, // Adaugă funcția nouă în context
       }}
     >
       {children}

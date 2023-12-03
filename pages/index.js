@@ -11,6 +11,8 @@ import Link from 'next/link'
 import ProductCategoryList from '@/components/ProductCategoryList'
 import InstructionSteps from '@/components/InstructionSteps'
 import { Breadcrumb } from 'antd'
+import { useContext } from 'react'
+import { CartContext } from '@/context/shopContext'
 
 const categories = [
   {
@@ -29,7 +31,9 @@ const stepTwo =
 const stepThree =
   'Planen Sie Ihren Zaunverlauf, indem Sie die Zaunelemente aus der Übersicht auf die Rasenfläche ziehen. Länge und Preis werden immer angezeigt und mit nur einem Klick legen Sie den gesamten Zaun samt Zubehör in den Warenkorb.'
 
-export default function Home() {
+export default function Home({ products }) {
+  const { addToCart } = useContext(CartContext)
+
   return (
     <>
       <Head>
@@ -38,7 +42,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className="flex flex-col">
         <div className="container">
           <InstructionSteps
             title={title}
@@ -68,7 +72,32 @@ export default function Home() {
             ))}
           </ul>
         </div>
+        <div className="container">
+          <h1>Produse Test</h1>
+          <ul>
+            {products.length > 0 &&
+              products.map((product, index) => (
+                <Link href={`/products/${product.node.handle}`} key={index}>
+                  <ProductCategoryList
+                    title={product.node.title}
+                    image={product.node.images.edges[0].node.url}
+                    handle={product.node.handle}
+                  />
+                </Link>
+              ))}
+          </ul>
+        </div>
       </main>
     </>
   )
+}
+
+export async function getStaticProps() {
+  const products = await getAllProducts()
+
+  return {
+    props: {
+      products,
+    },
+  }
 }

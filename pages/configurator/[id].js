@@ -1,7 +1,8 @@
 import useSWR from 'swr'
 import axios from 'axios'
+import { Breadcrumb } from 'antd'
 import InfoBox from '@/components/InfoBox'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Context } from '@/context/configuratorContext'
 import ElementLibrary from '@/components/ElementLibrary'
 import styles from '@/styles/ConfiguratorStage.module.css'
@@ -14,8 +15,7 @@ import {
   ChevronRightIcon,
   CloudIcon,
 } from '@heroicons/react/20/solid'
-import NextBreadcrumb from '@/components/Breadcrumb'
-import { Breadcrumb } from 'antd'
+import { CartContext } from '@/context/shopContext'
 
 const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
 const stepOne =
@@ -31,10 +31,15 @@ const fetchCollections = (url) => axios.get(url).then((res) => res.data)
 const Configurator = () => {
   const params = useParams()
   const router = useRouter()
+  const { addItemsToCart, addMultipleToCart } = useContext(CartContext)
 
   const [loading, setLoading] = useState(true)
-  const { selectedPfosten, setSelectedPfosten, handleAddToConfigurator } =
-    useContext(Context)
+  const {
+    selectedPfosten,
+    setSelectedPfosten,
+    handleAddToConfigurator,
+    configuratorItems,
+  } = useContext(Context)
 
   const { data: allCollections } = useSWR(
     [`/api/collections`],
@@ -52,7 +57,9 @@ const Configurator = () => {
     if (allZaunserie) {
       const meta = allZaunserie?.metaobjects?.edges
       const filterMeta = meta?.filter((m) => m?.node?.handle === params?.id)
-      const pfosten = filterMeta.map((m) => m.node.fields[2])
+      const pfosten = filterMeta.map((m) =>
+        m.node.fields.find((f) => f.key === 'pfosten')
+      )
       return pfosten
     }
     return
@@ -60,7 +67,7 @@ const Configurator = () => {
 
   const getCollection = (allCollections) => {
     if (allCollections) {
-      const meta = allCollections?.collections.edges
+      const meta = allCollections?.collections?.edges
 
       const filterMeta = meta?.filter(
         (f) => f?.node?.handleCollection?.value === params?.id
@@ -93,7 +100,9 @@ const Configurator = () => {
   const data =
     filteredZaunseriesPfoste?.length > 0
       ? filteredZaunseriesPfoste.map(
-          (z) => z?.reference?.fields[1]?.references.edges[0]
+          (z) =>
+            z?.reference?.fields.find((f) => f.key === 'pfosten').references
+              .edges[0]
         )
       : null
 
@@ -106,6 +115,52 @@ const Configurator = () => {
   useEffect(() => {
     setSelectedPfosten(defaultPfoste ? defaultPfoste[0] : data)
   }, [data, defaultPfoste, selectedPfosten, setSelectedPfosten])
+
+  const configuratorToAdeddItems = configuratorItems.map((item) => {
+    const allOptions = {}
+
+    item.node.options.map((item) => {
+      allOptions[item.name] = item.values[0]
+    })
+
+    return {
+      id: item.node.variants.edges[0].node.id,
+      title: item.node.title,
+      handle: item.node.handle,
+      image: item.node.images?.nodes[0].url,
+      options: allOptions,
+      variantTitle: item.node.title,
+      variantPrice: item.node.variants.edges[0].node.priceV2.amount,
+      variantQuantity: 1,
+    }
+  })
+
+  function groupedProducts(configuratorToAdeddItems) {
+    if (configuratorToAdeddItems.length > 0) {
+      const groupedProductsObj = {}
+
+      configuratorToAdeddItems.forEach((product) => {
+        const productId = product.id
+
+        // Dacă produsul există în obiectul grupat, mărește variantQuantity
+        if (groupedProductsObj[productId]) {
+          groupedProductsObj[productId].variantQuantity +=
+            product.variantQuantity
+        } else {
+          // Dacă produsul nu există, adaugă-l în obiectul grupat
+          groupedProductsObj[productId] = { ...product }
+        }
+      })
+
+      // Transformă obiectul grupat într-un array
+      const resultProducts = Object.values(groupedProductsObj)
+
+      return resultProducts
+    }
+    return
+  }
+
+  const groupedProductsFinal = groupedProducts(configuratorToAdeddItems)
 
   const products = () => {
     const products = [
@@ -173,7 +228,7 @@ const Configurator = () => {
                 }`,
               },
               {
-                title: 'Zurück',
+                title: 'Zaunserie ändern',
                 href: '#',
                 onClick: () =>
                   router.push(
@@ -188,7 +243,7 @@ const Configurator = () => {
           />
 
           <ElementLibrary
-            filteredCollection={filteredCollections}
+            filteredCollection={filteredZaunserie}
             handleAddToConfigurator={handleAddToConfigurator}
           />
           <ConfiguratorStage />
@@ -210,13 +265,13 @@ const Configurator = () => {
                 <CloudIcon className="w-5 h-5" />
               </a>
 
-              <a
-                href="#"
+              <button
+                onClick={() => addMultipleToCart(groupedProductsFinal)}
                 className="flex items-center m-0  min-w-[160px] justify-center bg-red-500 text-white px-4 py-2 gap-1 cursor-pointer"
               >
                 weiter
                 <ChevronRightIcon className="w-5 h-5 mt-1" />
-              </a>
+              </button>
             </div>
           </div>
         </>

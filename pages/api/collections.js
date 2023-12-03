@@ -52,65 +52,6 @@ export default async function send(req, res) {
                     handle
                     id
                     tags
-                    
-                    pfosten: metafield(namespace: "custom", key: "pfoste") {
-                      key
-                      id
-                      reference {
-                        ... on Product {
-                          id
-                          handle
-                          title
-                          tags
-                          images(first: 10) {
-                            nodes {
-                              src
-                              url
-                            }
-                          }
-                          options(first: 10) {
-                            name
-                            values
-                          }
-                          variants(first: 10) {
-                            edges {
-                              node {
-                                priceV2 {
-                                  amount
-                                  currencyCode
-                                }
-                                compareAtPriceV2 {
-                                  amount
-                                  currencyCode
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                    pfosten_2: metafield(namespace: "custom", key: "poste_2") {
-                      key
-                      id
-                      references(first: 10) {
-                        edges {
-                          node {
-                            ... on Product {
-                              id
-                              title
-                              tags
-                              images(first: 10) {
-                                edges {
-                                  node {
-                                    src
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
                     images(first: 10) {
                       nodes {
                         src
@@ -124,6 +65,10 @@ export default async function send(req, res) {
                     variants(first: 10) {
                       edges {
                         node {
+                          title
+                          image {
+                            url
+                          }
                           priceV2 {
                             amount
                             currencyCode

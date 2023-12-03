@@ -20,7 +20,7 @@ const AddNewProducts = ({
       {hoveredProduct ? (
         <>
           <li
-            className={`${styles.ElementTrack_Item} opacity-50  transition ease-in-out`}
+            className={`${styles.ElementTrack_Item} opacity-50 ease-in-out duration-100`}
           >
             <div className={styles.FenceConfigurator_StageItem}>
               <div className={styles.Inner}>

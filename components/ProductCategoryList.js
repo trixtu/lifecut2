@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-const ProductCategoryList = ({ title, image, handle }) => {
+const ProductCategoryList = ({ title, image }) => {
   return (
     <li className="float-left cardItem">
       <Image

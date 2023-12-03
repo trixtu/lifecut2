@@ -1,15 +1,9 @@
-'use client'
-
-import NextBreadcrumb from '@/components/Breadcrumb'
+import React from 'react'
+import Link from 'next/link'
+import { Breadcrumb } from 'antd'
+import { getAllSubcategory } from '@/lib/shopify'
 import InstructionSteps from '@/components/InstructionSteps'
 import ProductCategoryList from '@/components/ProductCategoryList'
-import ChevronRight from '@/components/ui/ChevronRight'
-import { getAllSubcategory } from '@/lib/shopify'
-import { Breadcrumb } from 'antd'
-import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import { useRouter } from 'next/router'
-import React, { useState } from 'react'
 
 const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
 const stepOne =
@@ -19,27 +13,8 @@ const stepTwo =
 const stepThree =
   'Wählen Sie abschießend die gewünschten Pfosten, die bevorzugte Befestigungsart und ggf. extra Zubehör aus. Mit nur einem Klick legen Sie den gesamten Zaun samt Zubehör in den Warenkorb.'
 
-export default function productsCategory({ subCategory }) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const route = useRouter()
-
-  const id = route.query.id
-
-  // const meta = subCategory?.metaobjects?.edges.map((m) =>
-  //   m.node.fields.find((field) => field?.reference?.handle === id)
-  // )
-  let categories = []
-  if (subCategory) {
-    const meta = subCategory?.metaobjects?.edges.filter(
-      (m) =>
-        (m.node.fields[0].reference.handle === id) |
-        (m.node.fields[1].reference.handle === id)
-    )
-
-    categories = meta
-  }
-
-  if (categories.length > 0) {
+export default function productsCategory({ categories }) {
+  if (categories?.length > 0) {
     return (
       <div className="container">
         <InstructionSteps
@@ -83,7 +58,10 @@ export default function productsCategory({ subCategory }) {
             <Link key={c.node?.handle} href={`/zaunserie/${c.node?.handle}`}>
               <ProductCategoryList
                 title={c.node?.handle}
-                image={c.node.fields[1].reference.image?.url}
+                image={
+                  c.node?.fields.find((f) => f.key === 'subcategory_image')
+                    .reference.image?.url
+                }
                 handle={c.node?.handle}
               />
             </Link>
@@ -93,14 +71,22 @@ export default function productsCategory({ subCategory }) {
     )
   }
 
-  return <div>null</div>
+  return <div>Null Material</div>
 }
 
-export async function getStaticProps() {
+export async function getStaticProps(context) {
+  const { params } = context
+  const subCategoryId = params.id
   const subCategory = await getAllSubcategory()
+  const meta = subCategory.metaobjects.edges
+  const categories = meta.filter(
+    (m) =>
+      m.node.fields.find((f) => f.key === 'parent').reference.handle ===
+      subCategoryId
+  )
 
   return {
-    props: { subCategory }, // will be passed to the page component as props
+    props: { categories }, // will be passed to the page component as props
   }
 }
 

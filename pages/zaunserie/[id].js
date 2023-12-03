@@ -32,7 +32,9 @@ export default function Zaunseries() {
     if (allCollections) {
       const meta = allCollections?.metaobjects?.edges
       const filterMeta = meta?.filter(
-        (m) => m?.node?.fields[1]?.reference?.handle === params?.id
+        (m) =>
+          m?.node?.fields.find((f) => f.key === 'parent').reference?.handle ===
+          params?.id
       )
 
       return filterMeta
@@ -120,8 +122,14 @@ export default function Zaunseries() {
                 onClick={() => defaultProduct(c.node)}
               >
                 <ProductCategoryList
-                  title={c?.node?.fields[3]?.value}
-                  image={c.node.fields[5].reference?.image?.url}
+                  title={
+                    c?.node?.fields.find((f) => f.key === 'subcategory_title')
+                      .value
+                  }
+                  image={
+                    c.node.fields.find((f) => f.key === 'zaunserie_image')
+                      .reference?.image?.url
+                  }
                   handle={c.node.handle}
                 />
               </a>

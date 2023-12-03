@@ -29,7 +29,7 @@ export default function MiniCart({ cart }) {
       <Dialog
         initialFocus={cancelButtonRef}
         as="div"
-        className="fixed inset-0 z-50 overflow-hidden"
+        className="fixed inset-0 z-[999] overflow-hidden"
         onClose={() => {
           setCartOpen(!cartOpen)
         }}
@@ -58,7 +58,7 @@ export default function MiniCart({ cart }) {
               leaveTo="translate-x-full"
             >
               <div className="w-screen max-w-md">
-                <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
+                <div className="flex flex-col h-screen  overflow-y-scroll bg-white shadow-xl">
                   <div className="flex-1 px-4 py-6 overflow-y-auto sm:px-6">
                     <div className="flex items-start justify-between">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
@@ -113,7 +113,7 @@ export default function MiniCart({ cart }) {
                                 <div className="relative flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
                                   <Image
                                     src={product.image}
-                                    alt={product.title}
+                                    alt={'img_' + product.title}
                                     layout="fill"
                                     objectFit="cover"
                                   />
