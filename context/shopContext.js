@@ -1,5 +1,9 @@
 import { createContext, useState, useEffect } from 'react'
-import { createCheckout, updateCheckout } from '../lib/shopify'
+import {
+  createCheckout,
+  createCheckoutOneProduct,
+  updateCheckout,
+} from '../lib/shopify'
 import { createCheckout2 } from '@/lib/checkout'
 
 const CartContext = createContext()
@@ -33,7 +37,7 @@ export default function ShopProvider({ children }) {
     if (cart.length === 0) {
       setCart([newItem])
 
-      const checkout = await createCheckout(newItem.id, 1)
+      const checkout = await createCheckoutOneProduct(newItem.id, 1)
       setCheckoutId(checkout.id)
       setCheckoutUrl(checkout.webUrl)
 
