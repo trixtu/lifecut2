@@ -33,7 +33,10 @@ const Configurator = () => {
   const router = useRouter()
   const { addItemsToCart, addMultipleToCart } = useContext(CartContext)
 
+  //const [items, setItems] = useState([])
+
   const [loading, setLoading] = useState(true)
+
   const {
     selectedPfosten,
     setSelectedPfosten,
@@ -232,8 +235,11 @@ const Configurator = () => {
 
   const groupedPfostenFinal = groupedPfosten(configuratorPfosten)
 
-  const items = [...groupedProductsFinal, ...groupedPfostenFinal]
+  if (!groupedProductsFinal && !groupedPfostenFinal) {
+    return
+  }
 
+  const items = groupedProductsFinal?.concat(groupedPfostenFinal)
   const products = () => {
     const products = [
       { title: 'eeer', desc: 'ddfdfdfdf' },

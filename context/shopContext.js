@@ -67,10 +67,9 @@ export default function ShopProvider({ children }) {
     }
   }
 
-  async function addMultipleToCart(addedItems, addedPfoste) {
+  async function addMultipleToCart(addedItems) {
     setCartOpen(true)
 
-    console.log('addedPfoste', addedPfoste)
     if (cart.length === 0) {
       const itemsWithQuantities = addedItems.map((item) => ({
         ...item,
