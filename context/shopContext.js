@@ -3,6 +3,7 @@ import {
   createCheckout,
   createCheckoutOneProduct,
   updateCheckout,
+  updateCheckoutMultiple,
 } from '../lib/shopify'
 import { createCheckout2 } from '@/lib/checkout'
 
@@ -93,49 +94,21 @@ export default function ShopProvider({ children }) {
         const existingItem = newCart.find((item) => item.id === addedItem.id)
 
         if (existingItem) {
-          existingItem.variantQuantity += 1
+          existingItem.variantQuantity += addedItem.variantQuantity
         } else {
-          newCart.push({ ...addedItem, variantQuantity: 1 })
+          newCart.push({ ...addedItem })
         }
       })
 
       setCart(newCart)
 
-      const newCheckout = await updateCheckout(checkoutId, newCart)
+      const newCheckout = await updateCheckoutMultiple(checkoutId, newCart)
 
       localStorage.setItem(
         'checkout_id',
         JSON.stringify([newCart, newCheckout])
       )
     }
-  }
-
-  async function addItemsToCart(itemsToAdd) {
-    const newItem = [...itemsToAdd]
-
-    console.log('item', newItem[0].id)
-
-    if (cart.length === 0) {
-      setCart(newItem)
-      const checkout = await createCheckout(newItem[0].id, 1)
-      //const newCheckout = await updateCheckout(checkoutId, newItem)
-      setCheckoutId(checkout.id)
-      setCheckoutUrl(checkout.webUrl)
-
-      localStorage.setItem('checkout_id', JSON.stringify([newItem, checkout]))
-    }
-
-    // // Exemplu:
-    // const updatedCart = [...cart, ...itemsToAdd]
-
-    // setCart(updatedCart)
-
-    // const newCheckout = await updateCheckout(checkoutId, updatedCart)
-
-    // localStorage.setItem(
-    //   'checkout_id',
-    //   JSON.stringify([updatedCart, newCheckout])
-    // )
   }
 
   async function removeCartItem(itemToRemove) {
@@ -227,7 +200,6 @@ export default function ShopProvider({ children }) {
         incrementCartItem,
         decrementCartItem,
         addMultipleToCart,
-        addItemsToCart, // Adaugă funcția nouă în context
       }}
     >
       {children}
