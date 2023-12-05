@@ -19,8 +19,9 @@ const stepThree =
 const fetchCollections = (url) => axios.get(url).then((res) => res.data)
 
 export default function Zaunseries() {
-  const params = useParams()
   const [loading, setLoading] = useState(true)
+
+  const params = useParams()
 
   const { data: allCollections } = useSWR(
     [`/api/zaunserie`],

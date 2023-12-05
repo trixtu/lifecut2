@@ -16,6 +16,7 @@ import {
   CloudIcon,
 } from '@heroicons/react/20/solid'
 import { CartContext } from '@/context/shopContext'
+import ModalAddToCart from '@/components/ModalAddToCart'
 
 const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
 const stepOne =
@@ -31,9 +32,8 @@ const fetchCollections = (url) => axios.get(url).then((res) => res.data)
 const Configurator = () => {
   const params = useParams()
   const router = useRouter()
-  const { addItemsToCart, addMultipleToCart } = useContext(CartContext)
 
-  //const [items, setItems] = useState([])
+  let [isOpen, setIsOpen] = useState(false)
 
   const [loading, setLoading] = useState(true)
 
@@ -187,6 +187,10 @@ const Configurator = () => {
   }
 
   const groupedProductsFinal = groupedProducts(configuratorToAdeddItems)
+
+  function openModal() {
+    setIsOpen(true)
+  }
 
   //grouped pfosten
   function groupedPfosten(configuratorPfosten) {
@@ -344,12 +348,17 @@ const Configurator = () => {
               </a>
 
               <button
-                onClick={() => addMultipleToCart(items)}
+                onClick={openModal}
                 className="flex items-center m-0  min-w-[160px] justify-center bg-red-500 text-white px-4 py-2 gap-1 cursor-pointer"
               >
                 weiter
                 <ChevronRightIcon className="w-5 h-5 mt-1" />
               </button>
+              <ModalAddToCart
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                items={items}
+              />
             </div>
           </div>
         </>

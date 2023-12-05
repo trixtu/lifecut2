@@ -14,7 +14,17 @@ const stepThree =
   'Wählen Sie abschießend die gewünschten Pfosten, die bevorzugte Befestigungsart und ggf. extra Zubehör aus. Mit nur einem Klick legen Sie den gesamten Zaun samt Zubehör in den Warenkorb.'
 
 export default function productsCategory({ categories }) {
-  if (categories?.length > 0) {
+  const categoryItems = categories?.map((item) => {
+    const image = item.node.fields.find((f) => f.key === 'subcategory_image')
+      .reference.image.url
+    return {
+      key: item.node.handle,
+      title: item.node.handle,
+      image: image,
+    }
+  })
+
+  if (categoryItems) {
     return (
       <div className="container">
         <InstructionSteps
@@ -54,24 +64,20 @@ export default function productsCategory({ categories }) {
         />
 
         <ul className="mt-5">
-          {categories.map((c) => (
-            <Link key={c.node?.handle} href={`/zaunserie/${c.node?.handle}`}>
-              <ProductCategoryList
-                title={c.node?.handle}
-                image={
-                  c.node?.fields.find((f) => f.key === 'subcategory_image')
-                    .reference.image?.url
-                }
-                handle={c.node?.handle}
-              />
-            </Link>
-          ))}
+          {categoryItems &&
+            categoryItems.map((c) => (
+              <Link key={c.key} href={`/zaunserie/${c.title}`}>
+                <ProductCategoryList
+                  title={c.title}
+                  image={c.image}
+                  handle={c.title}
+                />
+              </Link>
+            ))}
         </ul>
       </div>
     )
   }
-
-  return <div>Null Material</div>
 }
 
 export async function getStaticProps(context) {

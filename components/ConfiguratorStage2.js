@@ -22,7 +22,6 @@ export default function ConfiguratorStage2() {
     handleSort,
   } = useContext(Context)
 
-  console.log(configuratorItems)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleScroll = () => {
     const container = scrollContainerRef.current
@@ -255,7 +254,6 @@ export default function ConfiguratorStage2() {
 
   // Funcție pentru a reordona elementele atunci când sunt trase și plasate
   const onDragEnd = (result) => {
-    console.log('hello')
     // const droppableId = result.destination.droppableId
     // // Logica de actualizare a stării în funcție de
     // if (!result.destination) {

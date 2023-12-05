@@ -137,6 +137,15 @@ export default function MiniCart({ cart }) {
                                     <p className="mt-1 text-sm text-gray-500">
                                       {product.variantTitle}
                                     </p>
+                                    {product.height && (
+                                      <p className="mt-1 text-sm text-gray-500">
+                                        Höhe:{' '}
+                                        <strong>
+                                          {parseFloat(product.height)}
+                                        </strong>{' '}
+                                        cm
+                                      </p>
+                                    )}
                                   </div>
                                   <div className="flex items-end justify-between flex-1 text-sm">
                                     {/* <p className="text-gray-500">

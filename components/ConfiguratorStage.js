@@ -8,6 +8,8 @@ import { Context } from '@/context/configuratorContext'
 import getSymbolFromCurrency from 'currency-symbol-map'
 import styles from '@/styles/ConfiguratorStage.module.css'
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 export default function ConfiguratorStage() {
   const scrollContainerRef = useRef(null)
@@ -285,6 +287,27 @@ export default function ConfiguratorStage() {
 
   const zoomIn = () => {
     setZoomLevel((prevZoom) => Math.min(1, prevZoom + 0.1)) // Crește nivelul de zoom cu 0.1, dar nu mai mult de 2
+  }
+
+  const handleExportToPDF = async () => {
+    const element = document.getElementById('content-to-export')
+
+    if (element) {
+      // Calculează dimensiunile pentru a se asigura că întregul conținut este vizibil
+      const { width, height } = element.getBoundingClientRect()
+
+      // Creează un canvas cu dimensiunile calculate
+      const canvas = await html2canvas(element, { width, height })
+
+      // Creează un document PDF și adaugă imaginea din canvas
+      const pdf = new jsPDF({
+        unit: 'px',
+        format: [width, height], // Ajustează formatul PDF la dimensiunile conținutului
+      })
+
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0)
+      pdf.save('exported-document.pdf')
+    }
   }
 
   return (
