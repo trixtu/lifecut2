@@ -1,18 +1,11 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-
-import {
-  getAllProducts,
-  getMainMenu,
-  getProductsInCollection,
-} from '@/lib/shopify'
 import Link from 'next/link'
-import ProductCategoryList from '@/components/ProductCategoryList'
-import InstructionSteps from '@/components/InstructionSteps'
 import { Breadcrumb } from 'antd'
 import { useContext } from 'react'
+import {getAllProducts} from '@/lib/shopify'
 import { CartContext } from '@/context/shopContext'
+import InstructionSteps from '@/components/InstructionSteps'
+import ProductCategoryList from '@/components/ProductCategoryList'
 
 const categories = [
   {
@@ -23,15 +16,14 @@ const categories = [
   },
 ]
 
+
 const title = 'Willkommen beim Zaunplaner von hoerner-gmbh.com'
-const stepOne =
-  'Wählen Sie im unteren Bereich eine Zaunvariante, je nachdem ob Sie einen Sichtschutz, einen Garten- oder Doppelstabzaun benötigen.'
-const stepTwo =
-  'Bestimmen Sie nun das gewünschte Material und wählen die Zaunserie aus, deren Design Ihnen gefällt.'
-const stepThree =
-  'Planen Sie Ihren Zaunverlauf, indem Sie die Zaunelemente aus der Übersicht auf die Rasenfläche ziehen. Länge und Preis werden immer angezeigt und mit nur einem Klick legen Sie den gesamten Zaun samt Zubehör in den Warenkorb.'
+const stepOne = 'Wählen Sie im unteren Bereich eine Zaunvariante, je nachdem ob Sie einen Sichtschutz, einen Garten- oder Doppelstabzaun benötigen.'
+const stepTwo = 'Bestimmen Sie nun das gewünschte Material und wählen die Zaunserie aus, deren Design Ihnen gefällt.'
+const stepThree = 'Planen Sie Ihren Zaunverlauf, indem Sie die Zaunelemente aus der Übersicht auf die Rasenfläche ziehen. Länge und Preis werden immer angezeigt und mit nur einem Klick legen Sie den gesamten Zaun samt Zubehör in den Warenkorb.'
 
 export default function Home({ products }) {
+
   const { addToCart } = useContext(CartContext)
 
   return (
@@ -42,14 +34,17 @@ export default function Home({ products }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <main className="flex flex-col">
         <div className="container">
+
           <InstructionSteps
             title={title}
             stepOne={stepOne}
             stepTwo={stepTwo}
             stepThree={stepThree}
           />
+
           <Breadcrumb
             className="font-semibold"
             separator="/"
@@ -71,9 +66,9 @@ export default function Home({ products }) {
               </Link>
             ))}
           </ul>
-        </div>
-        <div className="container">
+
           <h1>Produse Test</h1>
+
           <ul>
             {products.length > 0 &&
               products.map((product, index) => (
@@ -82,10 +77,11 @@ export default function Home({ products }) {
                     title={product.node.title}
                     image={product.node.images.edges[0].node.url}
                     handle={product.node.handle}
-                  />
+                    />
                 </Link>
               ))}
           </ul>
+          
         </div>
       </main>
     </>
@@ -93,6 +89,7 @@ export default function Home({ products }) {
 }
 
 export async function getStaticProps() {
+
   const products = await getAllProducts()
 
   return {
