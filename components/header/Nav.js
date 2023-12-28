@@ -6,13 +6,11 @@ import TopNavBar from './TopNavBar'
 import NavBarLink from './NavBarLink'
 import Search from './Search'
 import User from './User'
-import { FaBars } from 'react-icons/fa'
 import Bars from './Bars'
 import { useRouter } from 'next/navigation'
 import BottomMenu from './BottomMenu'
 
 export default function Nav() {
-
   const router = useRouter()
 
   const navigation = [
@@ -121,45 +119,45 @@ export default function Nav() {
   ]
 
   return (
-    <Header>
-      <TopNavBar />
-      <MaxWidthWrapper>
-        {/* Mobile */}
-        <div className='md:hidden'>
-          <div className='flex items-center h-20 justify-between '>
-            <Logo />
-            <Bars navigation={navigation}/>
+      <Header>
+        <TopNavBar />
+        <MaxWidthWrapper>
+          {/* Mobile */}
+          <div className='md:hidden'>
+            <div className='flex items-center h-20 justify-between '>
+              <Logo />
+              <Bars navigation={navigation}/>
+            </div>
+            <Search />
+            <BottomMenu/>
           </div>
-          <Search />
-          <BottomMenu/>
-        </div>
-        {/* end mobile */}
+          {/* end mobile */}
 
-        {/* tablet */}
-        <div className='hidden md:block lg:hidden'>
-          <div className='flex items-center h-20 justify-between '>
+          {/* tablet */}
+          <div className='hidden md:block lg:hidden'>
+            <div className='flex items-center h-20 justify-between '>
+              <Logo />
+              <Search />
+              <Bars navigation={navigation}/>
+            </div>
+          </div>
+          {/* end tablet */}
+
+          {/* Desktop */}
+          <div className='hidden lg:flex md:h-16 items-center justify-between gap-2'>
             <Logo />
             <Search />
-            <Bars navigation={navigation}/>
+            <User />
+            <Cart />
           </div>
-        </div>
-        {/* end tablet */}
-
-        {/* Desktop */}
-        <div className='hidden lg:flex md:h-16 items-center justify-between gap-2'>
-          <Logo />
-          <Search />
-          <User />
-          <Cart />
-        </div>
-      </MaxWidthWrapper>
-      <div className='hidden lg:block bg-[#f2f2ee] border-t border-borderColor'>
-        <MaxWidthWrapper>
-          <NavBarLink navigation={navigation}/>
         </MaxWidthWrapper>
-      </div>
-      {/* end descktop */}
+        <div className='hidden lg:block bg-[#f2f2ee] border-t border-borderColor'>
+          <MaxWidthWrapper>
+            <NavBarLink navigation={navigation}/>
+          </MaxWidthWrapper>
+        </div>
+        {/* end descktop */}
 
-    </Header>
+      </Header>
   )
 }

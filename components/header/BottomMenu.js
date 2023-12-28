@@ -1,7 +1,15 @@
-import { Box, Flex, Link } from "@chakra-ui/react";
+import { CartContext } from "@/context/shopContext";
+import { Badge, Box, Flex, Link } from "@chakra-ui/react";
+import { useContext } from "react";
 import { FaHome, FaShoppingBag, FaUser } from "react-icons/fa";
 
 const BottomMenu = () => {
+  const { cart, cartOpen, setCartOpen } = useContext(CartContext)
+
+  let cartQuantity = 0
+  cart.map((item) => {
+    return (cartQuantity += item?.variantQuantity)
+  })
   return (
     <Flex
       position="fixed"
@@ -18,8 +26,9 @@ const BottomMenu = () => {
       <Link href="/search" color="gray.800" fontSize="xl">
         <Box as={FaUser} />
       </Link>
-      <Link href="/profile" color="gray.800" fontSize="xl">
+      <Link position={'relative'} color="gray.800" fontSize="xl" onClick={() => setCartOpen(!cartOpen)}>
         <Box as={FaShoppingBag} />
+        <Badge position={'absolute'} top={'-9px'} right={'-16px'} variant={'solid'} colorScheme={'red'}>{cartQuantity}</Badge>
       </Link>
     </Flex>
   );
