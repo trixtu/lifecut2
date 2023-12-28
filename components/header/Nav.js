@@ -9,6 +9,7 @@ import User from './User'
 import { FaBars } from 'react-icons/fa'
 import Bars from './Bars'
 import { useRouter } from 'next/navigation'
+import BottomMenu from './BottomMenu'
 
 export default function Nav() {
 
@@ -130,6 +131,7 @@ export default function Nav() {
             <Bars navigation={navigation}/>
           </div>
           <Search />
+          <BottomMenu/>
         </div>
         {/* end mobile */}
 
@@ -140,7 +142,6 @@ export default function Nav() {
             <Search />
             <Bars navigation={navigation}/>
           </div>
-          
         </div>
         {/* end tablet */}
 
