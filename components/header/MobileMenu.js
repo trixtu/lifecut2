@@ -1,18 +1,19 @@
-import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Input, Link, useDisclosure } from "@chakra-ui/react"
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/20/solid"
+import { Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Link, useDisclosure } from "@chakra-ui/react"
 import React, { useRef, useState } from "react"
 import { FaBars, FaChevronDown, FaChevronUp } from "react-icons/fa6"
 import Logo from "./Logo"
 
 const MobileMenu = ({navigation}) => {
+  const [openSubmenuIndex, setOpenSubmenuIndex] = useState(null);
+
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef()
-  const [openSubmenuIndex, setOpenSubmenuIndex] = useState(null);
 
   const toggleSubMenu = (index) => {
     setOpenSubmenuIndex((prevIndex) => (prevIndex === index ? null : index));
   };
-  console.log(navigation)
+
   return(
     <>
       <Link ref={btnRef} onClick={onOpen} bg={'rosuAprins.600'} borderRadius={5} p={1}>
@@ -25,7 +26,6 @@ const MobileMenu = ({navigation}) => {
         onClose={onClose}
         finalFocusRef={btnRef}
         size={{base:'full', md:'xs'}}
-        blockScrollOnMount
         allowPinchZoom
       >
         <DrawerOverlay />

@@ -9,8 +9,13 @@ function classNames(...classes) {
 }
 
 const NavBarLink = ({navigation}) => {
-  const [touched,setTouched] = useState(false)
-
+  const [colorMenu, setColorMenu] = useState(null);
+  const toggleColorMenu = (index) => {
+    setColorMenu((prevIndex) => (prevIndex === index ? null : index));
+  }
+  const insertColorMenu = (index) => {
+    setColorMenu((prevIndex) => (prevIndex === index ? null : index));
+  }
   return (
     <>
       {/* desktop */}
@@ -31,15 +36,11 @@ const NavBarLink = ({navigation}) => {
               
           >
             <Box 
-              _hover={{textDecoration:'none',bgColor:'#dad9d3'}} 
-              key={index}
+              _hover={{textDecoration:'none',bgColor:'#dad9d3'}}
+              bgColor={colorMenu === index && '#dad9d3'}
               px={3}
               py={1}>
-              <Link  
-                href={item.href}
-                
-                
-              >
+              <Link href={item.href}>
                 <Flex alignItems={'center'} gap={1} textTransform={'uppercase'} fontSize={'sm'} py={1}>  
                   {item.name}
                   {item.submenu && <FaChevronDown size={10}/>}
@@ -51,7 +52,9 @@ const NavBarLink = ({navigation}) => {
                 className="
                   nav__submenu 
                   absolute 
-                  border
+                  border-l
+                  border-r
+                  border-b
                   border-[#d5d5d1]
                   w-[330px] 
                   px-2 
@@ -62,10 +65,10 @@ const NavBarLink = ({navigation}) => {
                   z-50 
                   top-[36px]
                 "
-                onMouseEnter={()=>setTouched(true)}
-                onMouseLeave={()=>setTouched(false)}
+                onMouseEnter={()=>toggleColorMenu(index)}
+                onMouseLeave={()=>insertColorMenu(index)}
               >
-                {item.submenu.map((submenu, index) => (
+                {item.submenu && item.submenu.map((submenu, index) => (
                   <Link 
                     key={index} 
                     href={submenu.href}
