@@ -1,4 +1,5 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
+import { debounce } from "lodash";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -10,12 +11,12 @@ function classNames(...classes) {
 
 const NavBarLink = ({navigation}) => {
   const [colorMenu, setColorMenu] = useState(null);
-  const toggleColorMenu = (index) => {
+  const toggleColorMenu = debounce((index) => {
     setColorMenu((prevIndex) => (prevIndex === index ? null : index));
-  }
-  const insertColorMenu = (index) => {
+  },0)
+  const insertColorMenu = debounce((index) => {
     setColorMenu((prevIndex) => (prevIndex === index ? null : index));
-  }
+  },0)
   return (
     <>
       {/* desktop */}
@@ -63,7 +64,7 @@ const NavBarLink = ({navigation}) => {
                   rounded-sm 
                   bg-[#dad9d3] 
                   z-50 
-                  top-[36px]
+                  top-[35px]
                 "
                 onMouseEnter={()=>toggleColorMenu(index)}
                 onMouseLeave={()=>insertColorMenu(index)}

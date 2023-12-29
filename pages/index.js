@@ -6,6 +6,8 @@ import { getAllProducts } from '@/lib/shopify'
 import { CartContext } from '@/context/shopContext'
 import InstructionSteps from '@/components/InstructionSteps'
 import ProductCategoryList from '@/components/ProductCategoryList'
+import Slider from '@/components/slider/SliderHomePage'
+import SliderHomePage from '@/components/slider/SliderHomePage'
 
 const categories = [
     {
@@ -43,6 +45,7 @@ export default function Home({ products }) {
             </Head>
 
             <main className="flex flex-col">
+                <SliderHomePage />
                 <div className="container">
                     <InstructionSteps
                         title={title}

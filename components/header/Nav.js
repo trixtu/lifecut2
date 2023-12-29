@@ -157,7 +157,6 @@ export default function Nav() {
           </MaxWidthWrapper>
         </div>
         {/* end descktop */}
-
       </Header>
   )
 }
