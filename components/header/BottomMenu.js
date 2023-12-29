@@ -20,13 +20,13 @@ const BottomMenu = () => {
       p={4}
       bg="white"
     >
-      <Link href="/" color="gray.800" fontSize="xl">
+      <Link href="/" color="antracitGri.600" fontSize="xl">
         <Box as={FaHome} />
       </Link>
-      <Link href="/search" color="gray.800" fontSize="xl">
+      <Link href="/search" color="antracitGri.600" fontSize="xl">
         <Box as={FaUser} />
       </Link>
-      <Link position={'relative'} color="gray.800" fontSize="xl" onClick={() => setCartOpen(!cartOpen)}>
+      <Link position={'relative'} color="antracitGri.600" fontSize="xl" onClick={() => setCartOpen(!cartOpen)}>
         <Box as={FaShoppingBag} />
         <Badge position={'absolute'} top={'-9px'} right={'-16px'} variant={'solid'} colorScheme={'red'}>{cartQuantity}</Badge>
       </Link>

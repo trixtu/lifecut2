@@ -6,9 +6,9 @@ import TopNavBar from './TopNavBar'
 import NavBarLink from './NavBarLink'
 import Search from './Search'
 import User from './User'
-import Bars from './Bars'
 import { useRouter } from 'next/navigation'
 import BottomMenu from './BottomMenu'
+import MobileMenu from './MobileMenu'
 
 export default function Nav() {
   const router = useRouter()
@@ -126,7 +126,7 @@ export default function Nav() {
           <div className='md:hidden'>
             <div className='flex items-center h-20 justify-between '>
               <Logo />
-              <Bars navigation={navigation}/>
+              <MobileMenu navigation={navigation}/>
             </div>
             <Search />
             <BottomMenu/>
@@ -138,7 +138,7 @@ export default function Nav() {
             <div className='flex items-center h-20 justify-between '>
               <Logo />
               <Search />
-              <Bars navigation={navigation}/>
+              <MobileMenu navigation={navigation}/>
             </div>
           </div>
           {/* end tablet */}
