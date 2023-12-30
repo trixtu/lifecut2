@@ -7,39 +7,56 @@ import SlideNavButtons from './SlideNavButtons'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-
+import { Box, Button, Heading, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/navigation'
 
 const slideImages = [
     {
         url: 'https://www.hoerner-gmbh.com/wp-content/uploads/2019/09/terra_3-e1699091652815.jpg',
-        caption: 'Slide 1',
+        title: 'Ganzjähriges Outdoor-Feeling.',
+        subtitle: 'Terrassendächer',
     },
     {
         url: 'https://www.hoerner-gmbh.com/wp-content/uploads/2023/02/Slider-Werbemittel_CTA.jpg',
-        caption: 'Slide 2',
+        title: 'DAMIT ES SIE NICHT EISKALT ERWISCHT:',
+        subtitle:
+            'Tauschen Sie jetzt Ihre Fenster. Sparen Sie bis zu 40% Energie. Und das beste: Sie erhalten 20% der Gesamtkosten als Steuervorteil zurück.',
+        buttonLink: {
+            href: '/contact',
+            title: 'Hier mehr erfahren',
+        },
     },
     {
         url: 'https://www.hoerner-gmbh.com/wp-content/uploads/2023/03/B150_Wit_Verlichting-2019-8-scaled-e1699090848755.jpg',
-        caption: 'Slide 3',
+        title: 'Hält Sonne, Wind und Kälte ab.',
+        subtitle: 'Lamellendach',
+        buttonLink: {
+            href: '#',
+            title: 'Hier mehr erfahren',
+        },
     },
     {
         url: 'https://www.hoerner-gmbh.com/wp-content/uploads/2019/09/markisen_beschattungen-e1699091258617.jpg',
-        caption: 'Slide 4',
+        title: 'Für alle, die bei Wind und Wetter Großes vorhaben.',
+        subtitle: 'Markisen & Beschattungen ',
+        buttonLink: {
+            href: '#',
+            title: 'Hier mehr erfahren',
+        },
     },
 ]
 
 const SliderHomePage = () => {
     const [hover, setHover] = useState(false)
+    const router = useRouter()
     let hoverTimeout
-   
+
     const progressCircle = useRef(null)
     const progressContent = useRef(null)
     const onAutoplayTimeLeft = (s, time, progress) => {
         progressCircle.current.style.setProperty('--progress', 1 - progress)
         progressContent.current.textContent = `${Math.ceil(time / 1000)}s`
     }
-
-    
 
     const handleMouseEnter = () => {
         clearTimeout(hoverTimeout)
@@ -57,7 +74,6 @@ const SliderHomePage = () => {
             rewind={true}
             spaceBetween={50}
             slidesPerView={1}
-            pagination={true}
             autoplay={{
                 delay: 5000,
                 disableOnInteraction: false,
@@ -74,9 +90,55 @@ const SliderHomePage = () => {
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                             src={image.url}
-                            alt={image.caption}
+                            alt={image.title}
                         />
                     </div>
+                    {image.title && (
+                        <Box
+                            className="w-[500px]"
+                            display={{ base: 'none', sm: 'block' }}
+                            p={2}
+                            position={'absolute'}
+                            top={{ base: '5%', md: '10%', lg: '30%' }}
+                            left={'8%'}
+                            w={{ base: '90%', md: '70%', lg: '70%' }}
+                            textAlign={'initial'}
+                            onMouseEnter={handleMouseEnter}
+                        >
+                            <Heading
+                                color={'#fff'}
+                                fontSize={{ base: 'md', md: 'xl', lg: '3xl' }}
+                                textShadow={'3px 2px 2px black'}
+                                mb={4}
+                            >
+                                {image.title}
+                            </Heading>
+                            {image.subtitle && (
+                                <Text
+                                    color={'#fff'}
+                                    textShadow={'2px 2px 1px black'}
+                                    mb={4}
+                                    fontSize={{
+                                        base: 'sm',
+                                        md: 'md',
+                                        lg: 'xl',
+                                    }}
+                                >
+                                    {image.subtitle}
+                                </Text>
+                            )}
+                            {image.buttonLink && (
+                                <Button
+                                    colorScheme={'rosuAprins'}
+                                    onClick={() =>
+                                        router.push(`${image.buttonLink.href}`)
+                                    }
+                                >
+                                    {image.buttonLink.title}
+                                </Button>
+                            )}
+                        </Box>
+                    )}
                 </SwiperSlide>
             ))}
             <div className="slide-nav-buttons">
