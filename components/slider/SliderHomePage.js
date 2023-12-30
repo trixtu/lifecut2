@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import React from 'react'
-import { Autoplay, Navigation, Pagination, A11y } from 'swiper/modules'
+import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SlideNavButtons from './SlideNavButtons'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import gsap from 'gsap'
+
 
 const slideImages = [
     {
@@ -65,7 +65,6 @@ const SliderHomePage = () => {
             modules={[Autoplay, Navigation, Pagination]}
             onAutoplayTimeLeft={onAutoplayTimeLeft}
             className="mySwiper relative"
-            ref={sliderRef}
         >
             {slideImages.map((image, index) => (
                 <SwiperSlide key={index}>
@@ -84,7 +83,6 @@ const SliderHomePage = () => {
                 <SlideNavButtons
                     hover={hover}
                     handleMouseEnter={handleMouseEnter}
-                    buttonsRef={buttonsRef}
                 />
             </div>
             <div className="autoplay-progress" slot="container-end">
