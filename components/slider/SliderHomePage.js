@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import React from 'react'
-import { Navigation, Pagination, A11y } from 'swiper/modules'
+import { Autoplay, Navigation, Pagination, A11y } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import SlideNavButtons from './SlideNavButtons'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import SlideNavButtons from './SlideNavButtons'
 
 const slideImages = [
     {
@@ -27,11 +27,15 @@ const SliderHomePage = () => {
     const [hover, setHover] = useState(false)
     let hoverTimeout
 
-    const handleMouseEnter = () => {
-        // Anulează timeout-ul existent (dacă există)
-        clearTimeout(hoverTimeout)
+    const progressCircle = useRef(null)
+    const progressContent = useRef(null)
+    const onAutoplayTimeLeft = (s, time, progress) => {
+        progressCircle.current.style.setProperty('--progress', 1 - progress)
+        progressContent.current.textContent = `${Math.ceil(time / 1000)}s`
+    }
 
-        // Setează starea de hover
+    const handleMouseEnter = () => {
+        clearTimeout(hoverTimeout)
         setHover(true)
     }
 
@@ -47,24 +51,32 @@ const SliderHomePage = () => {
                 spaceBetween={50}
                 slidesPerView={1}
                 pagination={true}
-                modules={[Navigation, Pagination]}
+                autoplay={{
+                    delay: 5000,
+                    disableOnInteraction: false,
+                }}
+                modules={[Autoplay, Navigation, Pagination]}
+                onAutoplayTimeLeft={onAutoplayTimeLeft}
                 className="mySwiper relative"
             >
                 {slideImages.map((image, index) => (
-                    <div key={index} >
-                        <SwiperSlide>
-                            <img
-                            className='max-h-[280px] md:max-h-[400px] lg:max-h-[640px]'
-                                onMouseEnter={handleMouseEnter}
-                                onMouseLeave={handleMouseLeave}
-                                src={image.url}
-                                alt={image.caption}
-                                
-                            />
-                        </SwiperSlide>
-                    </div>
+                    <SwiperSlide key={index}>
+                        <img
+                            className="max-h-[280px] md:max-h-[400px] lg:max-h-[640px]"
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                            src={image.url}
+                            alt={image.caption}
+                        />
+                    </SwiperSlide>
                 ))}
                 <SlideNavButtons setHover={setHover} hover={hover} />
+                <div className="autoplay-progress" slot="container-end">
+                    <svg viewBox="0 0 48 48" ref={progressCircle}>
+                        <circle cx="24" cy="24" r="20"></circle>
+                    </svg>
+                    <span ref={progressContent}></span>
+                </div>
             </Swiper>
         </div>
     )
